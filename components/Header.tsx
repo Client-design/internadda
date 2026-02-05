@@ -31,7 +31,6 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
       document.body.style.overflow = 'unset';
     }
     
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -70,18 +69,18 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               className="flex items-center gap-2 cursor-pointer group"
             >
               <div className="relative">
-                  <img 
-                    src="https://drive.google.com/thumbnail?id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa&sz=w400"
-                    alt="Internadda"
-                    className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                    onError={(e) => {
-                      const parent = e.currentTarget.parentElement;
-                      if (parent) {
-                        parent.innerHTML = '<span class="text-white font-bold text-lg">IA</span>';
-                      }
-                    }}
-                  />
-                </div>
+                <img 
+                  src="https://drive.google.com/thumbnail?id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa&sz=w400"
+                  alt="Internadda"
+                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+                  onError={(e) => {
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      parent.innerHTML = '<span class="text-white font-bold text-lg">IA</span>';
+                    }
+                  }}
+                />
+              </div>
 
               <div className="flex flex-col">
                 <span className="font-extrabold text-lg sm:text-xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 tracking-tight">
@@ -164,7 +163,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - The only icon that toggles the "X" state via CSS classes */}
             <div className="lg:hidden flex items-center gap-3">
               <div className="trust-badge px-2 py-1 rounded text-[10px] font-bold">
                 MSME
@@ -194,39 +193,30 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             className={`absolute right-0 top-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-slate-100 bg-gradient-to-r from-indigo-50 to-purple-50">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">IA</span>
-                  </div>
-                  <div>
-                    <span className="font-bold text-lg text-slate-900">Internadda</span>
-                    <p className="text-xs text-slate-600">India's Adda for Internships</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-slate-600 hover:bg-slate-50"
-                >
-                  ✕
-                </button>
+            {/* Centered Mobile Header */}
+            <div className="p-6 border-b border-slate-100 bg-gradient-to-r from-indigo-50 to-purple-50 flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mb-3">
+                <span className="text-white font-bold text-xl">IA</span>
+              </div>
+              <div className="mb-8">
+                <span className="font-bold text-xl text-slate-900 block">Internadda</span>
+                <p className="text-xs text-slate-600">India's Adda for Internships</p>
               </div>
 
               {user ? (
-                <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-indigo-700">
+                <div className="flex flex-col items-center gap-3 p-4 bg-white rounded-xl shadow-sm w-full">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center">
+                    <span className="text-lg font-semibold text-indigo-700">
                       {getInitials(user.name)}
                     </span>
                   </div>
-                  <div className="flex-1">
+                  <div>
                     <div className="font-semibold text-slate-900">{user.name}</div>
                     <div className="text-xs text-slate-500 truncate">{user.email}</div>
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 w-full">
                   <Link 
                     to="/login" 
                     onClick={() => setMobileMenuOpen(false)}
@@ -239,13 +229,14 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-lg text-sm font-semibold shadow-sm"
                   >
-                    Get Started
+                    Get Started Free
                   </Link>
                 </div>
               )}
             </div>
 
-            <div className="p-4 space-y-1 max-h-[calc(100vh-200px)] overflow-y-auto">
+            {/* Navigation Links - Centered */}
+            <div className="p-4 space-y-1 text-center">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
@@ -255,7 +246,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`block px-4 py-3.5 rounded-lg text-sm font-medium transition-all ${
                       isActive 
-                        ? 'bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 border-l-4 border-indigo-500'
+                        ? 'bg-indigo-50 text-indigo-700 font-bold'
                         : 'text-slate-700 hover:bg-slate-50'
                     }`}
                   >
@@ -280,7 +271,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                       onLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="block w-full text-left px-4 py-3.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50"
+                    className="block w-full text-center px-4 py-3.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50"
                   >
                     Logout
                   </button>
@@ -288,6 +279,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               </div>
             </div>
 
+            {/* Trust Section */}
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-100 bg-white">
               <div className="text-center">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100">
@@ -295,7 +287,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                   <span className="text-xs font-semibold text-emerald-700">MSME Certified Platform</span>
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  7,000+ Students Trust Us • 98% Success Rate
+                  7,000+ Students Trust Us
                 </p>
               </div>
             </div>
