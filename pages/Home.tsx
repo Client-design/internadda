@@ -15,8 +15,8 @@ const Home: React.FC = () => {
 
   // Slider images for achievements/collaborations
   const sliderImages = [
-    "https://drive.google.com/file/d/1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx/view?usp=drive_link",
-    "https://drive.google.com/file/d/1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27/view?usp=drive_link"
+    "https://drive.google.com/file/d/1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27/view?usp=drive_link",
+    "https://drive.google.com/file/d/1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx/view?usp=drive_link"
   ];
 
   // Auto-slide logic
@@ -35,12 +35,12 @@ const Home: React.FC = () => {
     ? MOCK_INTERNSHIPS 
     : MOCK_INTERNSHIPS.filter(i => i.category === selectedCategory);
 
-  // Real Indian student face representation
+  // Real Indian student face images (Stock)
   const students = [
-    { name: "Rahul", color: "bg-orange-100 text-orange-700" },
-    { name: "Priya", color: "bg-blue-100 text-blue-700" },
-    { name: "Amit", color: "bg-emerald-100 text-emerald-700" },
-    { name: "Neha", color: "bg-purple-100 text-purple-700" }
+    { name: "Rahul", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=100&auto=format&fit=crop" },
+    { name: "Priya", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" },
+    { name: "Amit", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&auto=format&fit=crop" },
+    { name: "Neha", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" }
   ];
 
   return (
@@ -69,53 +69,57 @@ const Home: React.FC = () => {
                 <Link to="/internships" className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold text-sm hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm">
                   Find Internships <ArrowRight size={16} />
                 </Link>
-                <Link to="/about" className="px-6 py-3 bg-white text-slate-700 border border-slate-300 rounded-lg font-bold text-sm hover:bg-slate-50 transition-all">
-                  Verification Process
+                {/* Updated Button to Practice Mode */}
+                <Link to="/tests" className="px-6 py-3 bg-white text-slate-700 border border-slate-300 rounded-lg font-bold text-sm hover:bg-slate-50 transition-all">
+                  Practice Mode
                 </Link>
               </div>
 
-              {/* Updated Indian Students Section */}
+              {/* Real Student Images */}
               <div className="mt-8 flex items-center gap-6 text-slate-400">
                 <div className="flex -space-x-2">
                   {students.map((s, i) => (
-                    <div key={i} className={`w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-sm ${s.color}`}>
-                      {s.name[0]}
-                    </div>
+                    <img 
+                      key={i} 
+                      src={s.img} 
+                      alt={s.name}
+                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    />
                   ))}
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-widest">7,000+ Students Placed</p>
               </div>
             </div>
 
-            {/* Achievement Slider - Replaced Hiring Dashboard */}
+            {/* Achievement Slider */}
             <div className="hidden lg:block relative group">
                <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xl aspect-[4/3] flex items-center justify-center relative">
                   <div className="absolute top-4 left-4 z-10">
                     <span className="px-2 py-1 bg-white/90 backdrop-blur shadow-sm rounded text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
-                      New Achievements
+                      Our Collaborations
                     </span>
                   </div>
                   
                   <AnimatePresence mode='wait'>
                     <motion.div
                       key={currentSlide}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.05 }}
                       transition={{ duration: 0.5 }}
-                      className="w-full h-full flex items-center justify-center bg-slate-50"
+                      className="w-full h-full"
                     >
-                      {/* Note: Google Drive links might need a proxy or direct link to display in <img> tags */}
-                      <div className="text-center p-8">
-                        <p className="text-slate-400 text-xs mb-2">Displaying achievement {currentSlide + 1}</p>
-                        <a 
-                          href={sliderImages[currentSlide]} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-indigo-600 font-bold hover:underline text-sm"
-                        >
-                          View Official Collaboration Proof →
-                        </a>
+                      <img 
+                        src={sliderImages[currentSlide]} 
+                        alt="Achievement"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      {/* Fallback View link if image doesn't render directly from drive link */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-50/10">
+                         <a href={sliderImages[currentSlide]} target="_blank" className="bg-white/80 px-4 py-2 rounded-lg text-xs font-bold text-indigo-600 shadow-sm">View Achievement Proof</a>
                       </div>
                     </motion.div>
                   </AnimatePresence>
@@ -157,7 +161,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* 3. INTERNSHIP MARKETPLACE */}
-      <section className="py-16 max-w-7xl mx-auto px-4">
+      <section className="py-16 max-w-7xl mx-auto px-4" id="internships">
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
           <div className="text-center md:text-left">
             <h2 className="text-2xl font-bold text-slate-900">Current Openings</h2>
@@ -187,7 +191,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. VERIFICATION WORKFLOW */}
+      {/* 4. VERIFICATION WORKFLOW & ARJUN MEHTA TESTIMONIAL */}
       <section className="py-16 bg-slate-900 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -209,6 +213,8 @@ const Home: React.FC = () => {
                 ))}
               </div>
             </div>
+            
+            {/* Updated Arjun Mehta Section with Image */}
             <div className="bg-slate-800 rounded-xl border border-slate-700 p-8 text-left">
                <div className="flex items-center gap-2 mb-6">
                   <Globe size={16} className="text-indigo-400" />
@@ -218,7 +224,11 @@ const Home: React.FC = () => {
                  "Internadda has built a transparent ecosystem that significantly reduces hiring friction for early-stage startups."
                </p>
                <div className="mt-6 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-indigo-500"></div>
+                  <img 
+                    src="https://drive.google.com/file/d/12p0wO__YLIPYjABT1VmbA7wCgXrSlJyi/view?usp=drive_link" 
+                    alt="Arjun Mehta" 
+                    className="w-12 h-12 rounded-full object-cover border-2 border-indigo-500"
+                  />
                   <div>
                     <div className="text-sm font-bold">Arjun Mehta</div>
                     <div className="text-xs text-slate-500 font-medium">Founder, TechScale Solutions</div>
