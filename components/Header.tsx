@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { 
   Menu, X, Briefcase, GraduationCap, ChevronRight, 
-  Settings, LogOut, User as UserIcon, Bell, Search 
+  Settings, LogOut, User as UserIcon, Bell, Search,
+  Home as HomeIcon, Info, BookOpen
 } from "lucide-react";
 import { User } from "../types";
 
@@ -14,17 +15,17 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
 
-  // Scroll effect for header background
+  // Logo URL for direct embedding
+  const logoUrl = "https://drive.google.com/uc?export=view&id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa";
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fix: Jab menu open ho toh body scroll lock ho jaye
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -33,18 +34,18 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
     }
   }, [mobileMenuOpen]);
 
-  // Menu open karne wala function jo page ko top par le jayega
   const handleToggleMenu = () => {
     if (!mobileMenuOpen) {
-      window.scrollTo({ top: 0, behavior: 'instant' }); // Pehle page top par aayega
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
   const navLinks = [
+    { name: "Home", path: "/", icon: HomeIcon },
     { name: "Internships", path: "/internships", icon: Briefcase },
-    { name: "Tests", path: "/tests", icon: GraduationCap },
-    { name: "About", path: "/about", icon: Search },
+    { name: "Courses", path: "/courses", icon: BookOpen },
+    { name: "About Us", path: "/about", icon: Info },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -52,19 +53,31 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-        scrolled || mobileMenuOpen ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        scrolled || mobileMenuOpen ? "bg-white shadow-md py-1" : "bg-white/80 backdrop-blur-md py-2"
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-200">
-              <span className="text-white font-bold text-xl italic">i</span>
+          {/* Logo & Brand Section */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden rounded-lg">
+              <img 
+                src={logoUrl} 
+                alt="Internadda Logo" 
+                className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "https://via.placeholder.com/50?text=I";
+                }}
+              />
             </div>
-            <span className={`text-2xl font-black tracking-tighter ${scrolled || mobileMenuOpen ? 'text-slate-900' : 'text-slate-900'}`}>
-              INTERN<span className="text-indigo-600">ADDA</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-black tracking-tighter leading-none text-slate-900 group-hover:text-indigo-600 transition-colors">
+                INTERN<span className="text-indigo-600">ADDA</span>
+              </span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">
+                India's Adda for Opportunities
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -73,8 +86,8 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-semibold transition-colors hover:text-indigo-600 ${
-                  isActive(link.path) ? "text-indigo-600" : "text-slate-600"
+                className={`text-sm font-bold tracking-tight transition-all hover:text-indigo-600 relative py-2 ${
+                  isActive(link.path) ? "text-indigo-600 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600" : "text-slate-600"
                 }`}
               >
                 {link.name}
@@ -86,29 +99,34 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           <div className="hidden lg:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
-                  <Link to="/profile" className="flex items-center space-x-3 group">
-                    <div className="text-right">
-                      <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600">{user.name}</p>
-                      <p className="text-xs text-slate-500 capitalize">{user.role}</p>
-                    </div>
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 border-2 border-indigo-200 flex items-center justify-center">
-                      <UserIcon className="w-5 h-5 text-indigo-600" />
-                    </div>
-                  </Link>
-                </div>
+                <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                  <Bell className="w-5 h-5" />
+                </button>
+                <Link to="/profile" className="flex items-center space-x-3 pl-4 border-l border-slate-200 group">
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600">{user.name}</p>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{user.role}</p>
+                  </div>
+                  <div className="w-10 h-10 rounded-full bg-indigo-50 border-2 border-indigo-100 flex items-center justify-center overflow-hidden group-hover:border-indigo-600 transition-colors">
+                    <UserIcon className="w-5 h-5 text-indigo-600" />
+                  </div>
+                </Link>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
-                <Link to="/login" className="px-5 py-2 text-sm font-bold text-slate-700">Sign In</Link>
-                <Link to="/signup" className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-full shadow-lg">Get Started</Link>
+              <div className="flex items-center space-x-2">
+                <Link to="/login" className="px-5 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+                  Sign In
+                </Link>
+                <Link to="/signup" className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 hover:-translate-y-0.5 active:translate-y-0">
+                  Get Started
+                </Link>
               </div>
             )}
           </div>
 
-          {/* Hamburger Icon - Updated with handleToggleMenu */}
+          {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden p-2 rounded-lg bg-slate-100 text-slate-600"
+            className="lg:hidden p-2.5 rounded-xl bg-slate-100 text-slate-600 hover:text-indigo-600 transition-colors"
             onClick={handleToggleMenu}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -116,7 +134,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
         </div>
       </div>
 
-      {/* Mobile Menu Panel */}
+      {/* Mobile Menu Sidebar */}
       <div className={`lg:hidden fixed inset-0 z-[110] transition-all duration-300 ${mobileMenuOpen ? 'visible' : 'invisible'}`}>
         <div 
           className={`absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'}`}
@@ -124,47 +142,63 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
         />
         
         <div 
-          className={`absolute right-0 top-0 h-full w-[280px] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          className={`absolute right-0 top-0 h-full w-[300px] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Sidebar content */}
           <div className="p-6 border-b flex items-center justify-between">
-            <span className="font-bold text-slate-900">Menu</span>
-            <button onClick={() => setMobileMenuOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
+            <div className="flex flex-col">
+              <span className="font-black text-slate-900">INTERNADDA</span>
+              <span className="text-[9px] font-bold text-slate-400 tracking-tighter italic">INDIA'S ADDA FOR INTERNSHIP</span>
+            </div>
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-50 rounded-lg">
+              <X className="w-5 h-5 text-slate-400" />
+            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto py-4">
-            <div className="px-4 space-y-2">
+            <div className="px-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between p-4 rounded-xl ${
-                    isActive(link.path) ? "bg-indigo-50 text-indigo-600" : "text-slate-600"
+                  className={`flex items-center justify-between p-4 rounded-xl transition-all ${
+                    isActive(link.path) ? "bg-indigo-50 text-indigo-600 shadow-sm" : "text-slate-600 hover:bg-slate-50"
                   }`}
                 >
                   <div className="flex items-center space-x-3">
                     <link.icon className="w-5 h-5" />
                     <span className="font-bold text-sm">{link.name}</span>
                   </div>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className={`w-4 h-4 ${isActive(link.path) ? 'translate-x-1' : ''}`} />
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* User Actions Mobile */}
-          <div className="p-6 border-t mt-auto">
+          <div className="p-6 border-t bg-slate-50/50">
             {user ? (
               <div className="space-y-3">
-                 <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold text-slate-700 bg-slate-50 rounded-xl italic">My Profile</Link>
-                 <button onClick={() => { onLogout(); setMobileMenuOpen(false); }} className="w-full py-3 text-red-600 font-bold border-2 border-red-500 rounded-xl">Logout</button>
+                <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 p-4 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold text-sm shadow-sm">
+                  <UserIcon className="w-5 h-5 text-indigo-600" />
+                  <span>My Profile</span>
+                </Link>
+                <button
+                  onClick={() => { onLogout(); setMobileMenuOpen(false); }}
+                  className="w-full flex items-center justify-center space-x-2 py-4 text-red-600 rounded-xl font-bold text-sm border-2 border-red-50 border-dashed hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Log Out</span>
+                </button>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-3">
-                <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="py-3 text-center text-sm font-bold text-slate-700 bg-slate-100 rounded-xl">Login</Link>
-                <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="py-3 text-center text-sm font-bold text-white bg-indigo-600 rounded-xl">Join</Link>
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="py-3.5 text-center text-sm font-bold text-slate-700 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  Login
+                </Link>
+                <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="py-3.5 text-center text-sm font-bold text-white bg-indigo-600 rounded-xl shadow-lg">
+                  Join Now
+                </Link>
               </div>
             )}
           </div>
