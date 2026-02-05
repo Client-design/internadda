@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { 
+  CheckCircle, Users, Building2, Zap, ArrowRight, 
+  ShieldCheck, Star, Award, TrendingUp 
+} from 'lucide-react';
 import InternshipCard from '../components/InternshipCard';
 import { MOCK_INTERNSHIPS, CATEGORIES } from '../constants';
-import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Internships');
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  // Ensure page starts at top on load
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -15,291 +21,267 @@ const Home: React.FC = () => {
     ? MOCK_INTERNSHIPS 
     : MOCK_INTERNSHIPS.filter(i => i.category === selectedCategory);
 
-  const stats = {
-    internships: '30+',
-    placed: '7,000+',
-    companies: '150+',
-    processTime: '48h'
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
   };
 
-  const trustBadges = [
-    { text: '🏛️ MSME Certified', desc: 'Government Registered' },
-    { text: '🏆 98% Success Rate', desc: '7,000+ Students Placed' },
-    { text: '💰 Stipend Range', desc: '₹1,000 - ₹20,000/month' },
-    { text: '⚡ Fast Process', desc: 'Interview in 48 hours' }
-  ];
-
-  const testimonials = [
-    {
-      quote: "The direct interview process saved me months of waiting. Got my Google internship in 3 days!",
-      name: "Rahul Sharma",
-      company: "SWE Intern @ Google",
-      score: 92
-    },
-    {
-      quote: "As a non-tech student, I found amazing opportunities here. MSME certification gave me confidence.",
-      name: "Neha Gupta",
-      company: "Marketing @ Unacademy",
-      score: 85
-    }
-  ];
-
-  const features = [
-    {
-      icon: '🎯',
-      title: 'Direct Interviews',
-      description: 'Skip HR rounds, meet hiring managers directly'
-    },
-    {
-      icon: '📊',
-      title: 'Skill Assessment',
-      description: 'Industry-standard tests with anti-cheat'
-    },
-    {
-      icon: '🏆',
-      title: 'Certificate',
-      description: 'Recognized by 150+ companies'
-    },
-    {
-      icon: '💼',
-      title: 'Real Projects',
-      description: 'Work on live industry projects'
-    }
-  ];
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 }
+  };
 
   return (
-    <div className="pb-12">
-      {/* Hero Section - More Minimal & Professional */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 lg:pt-20 pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="space-y-8 text-center lg:text-left">
-              <div>
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-blue-50 px-4 py-2 rounded-full text-sm font-semibold text-indigo-700 mb-6 border border-indigo-100 mx-auto lg:mx-0">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                  Trusted by {stats.companies} Partner Companies
-                </div>
-                <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
-                  Premium Internships with{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">
-                    Guaranteed Interviews
-                  </span>
-                </h1>
-                <p className="text-lg text-slate-600 mt-6 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Join 7,000+ students who launched their careers through skill-based assessments and direct industry connections.
-                </p>
-              </div>
+    <div className="relative overflow-hidden bg-white">
+      {/* Top Progress Bar */}
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-indigo-600 z-[1000] origin-left" style={{ scaleX }} />
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link 
-                  to="/internships"
-                  className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-8 py-3.5 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group"
-                >
-                  <span>Browse Internships</span>
-                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </Link>
-                <Link 
-                  to="/tests"
-                  className="bg-white text-slate-700 border-2 border-slate-200 px-8 py-3.5 rounded-xl font-semibold text-lg hover:border-indigo-300 hover:shadow-sm transition-all flex items-center justify-center gap-2"
-                >
-                  Try Practice Test
-                </Link>
-              </div>
+      {/* Hero Section with Animated Mesh Background */}
+      <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-200 blur-[120px] animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-200 blur-[120px]" />
+        </div>
 
-              {/* Trust Badges - Minimal */}
-              <div className="grid grid-cols-2 gap-4 pt-8">
-                {trustBadges.map((badge, idx) => (
-                  <div key={idx} className="text-left p-3 bg-white rounded-xl border border-slate-100">
-                    <div className="font-bold text-slate-900 text-sm">{badge.text}</div>
-                    <div className="text-xs text-slate-500 mt-1">{badge.desc}</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold text-sm"
+            >
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-600"></span>
+              </span>
+              India's #1 Skill-Based Internship Platform
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-5xl lg:text-7xl font-black text-slate-900 leading-tight tracking-tight"
+            >
+              Don't Just Apply, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600">
+                Get Directly Placed.
+              </span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
+            >
+              Skip the HR line. Show your skills via industry-standard assessments and 
+              land internships at companies like <span className="font-bold text-slate-800">Google, Microsoft, and Unacademy.</span>
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <Link to="/internships" className="group relative px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg shadow-2xl shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2">
+                Browse Internships
+                <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link to="/tests" className="px-8 py-4 bg-white text-slate-700 border-2 border-slate-100 rounded-2xl font-bold text-lg hover:border-indigo-200 hover:bg-slate-50 transition-all">
+                Take Practice Test
+              </Link>
+            </motion.div>
+
+            {/* Live Stats */}
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-16 border-t border-slate-100"
+            >
+              {[
+                { label: 'Placements', value: '7,000+', icon: Users },
+                { label: 'Partners', value: '150+', icon: Building2 },
+                { label: 'Success Rate', value: '98%', icon: TrendingUp },
+                { label: 'Stipend Avg', value: '₹12k', icon: Award },
+              ].map((stat, i) => (
+                <motion.div key={i} variants={itemVariants} className="flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-3 text-indigo-600">
+                    <stat.icon size={24} />
                   </div>
-                ))}
+                  <div className="text-2xl font-black text-slate-900">{stat.value}</div>
+                  <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">{stat.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Badges - Marquee Style Look */}
+      <div className="py-10 bg-slate-50 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-[0.3em] mb-8">Trusted by MSME & Startup India</p>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all">
+             <div className="font-black text-2xl text-slate-400">MICROSOFT</div>
+             <div className="font-black text-2xl text-slate-400">GOOGLE</div>
+             <div className="font-black text-2xl text-slate-400">UNACADEMY</div>
+             <div className="font-black text-2xl text-slate-400">RAZORPAY</div>
+             <div className="font-black text-2xl text-slate-400">ZOMATO</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Why Internadda - Feature Cards with Glass effect */}
+      <section className="py-24 max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-black text-slate-900 mb-4">Why Students Love Us</h2>
+          <div className="h-1.5 w-20 bg-indigo-600 mx-auto rounded-full" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { 
+              title: "Direct Interviews", 
+              desc: "No more ghosting. Your test score gets you a direct seat with the hiring manager.",
+              icon: Zap, color: "bg-amber-500" 
+            },
+            { 
+              title: "Verified MSME Platform", 
+              desc: "Government recognized certification that adds massive value to your Resume.",
+              icon: ShieldCheck, color: "bg-emerald-500" 
+            },
+            { 
+              title: "Stipend Guaranteed", 
+              desc: "We only list paid internships. Earn while you learn with 100% payment security.",
+              icon: CheckCircle, color: "bg-indigo-500" 
+            }
+          ].map((feat, i) => (
+            <motion.div 
+              key={i}
+              whileHover={{ y: -10 }}
+              className="p-8 rounded-3xl bg-white border border-slate-100 shadow-xl shadow-slate-100/50 relative overflow-hidden group"
+            >
+              <div className={`w-14 h-14 rounded-2xl ${feat.color} text-white flex items-center justify-center mb-6 shadow-lg`}>
+                <feat.icon size={28} />
               </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">{feat.title}</h3>
+              <p className="text-slate-600 leading-relaxed">{feat.desc}</p>
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-slate-50 rounded-full group-hover:scale-150 transition-transform duration-500 -z-10" />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Internships with Filter Pills */}
+      <section id="internships" className="py-24 bg-slate-50/50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div className="text-left">
+              <h2 className="text-4xl font-black text-slate-900 mb-4">Featured Opportunities</h2>
+              <p className="text-slate-500 font-medium">Hand-picked premium roles for you</p>
             </div>
-
-            {/* Testimonial Side */}
-            <div className="space-y-6">
-              {testimonials.map((testimonial, idx) => (
-                <div key={idx} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center">
-                        <span className="text-lg font-bold text-indigo-600">
-                          {testimonial.name.split(' ').map(n => n[0]).join('')}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-slate-700 italic mb-3">"{testimonial.quote}"</p>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-semibold text-slate-900">{testimonial.name}</div>
-                          <div className="text-sm text-slate-500">{testimonial.company}</div>
-                        </div>
-                        <div className="text-emerald-600 font-bold">
-                          {testimonial.score}%
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${
+                    selectedCategory === cat 
+                    ? 'bg-indigo-600 text-white shadow-lg' 
+                    : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-400'
+                  }`}
+                >
+                  {cat}
+                </button>
               ))}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Features Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Why Choose Internadda?</h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Industry-leading platform with proven results
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {features.map((feature, idx) => (
-            <div key={idx} className="text-center p-6 bg-white rounded-2xl border border-slate-200 hover:border-indigo-200 transition-colors">
-              <div className="text-3xl mb-4">{feature.icon}</div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">{feature.title}</h3>
-              <p className="text-slate-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Internship Listings */}
-      <div id="internships" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="mb-12">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Featured Internships</h2>
-            <p className="text-lg text-slate-600">
-              Hand-picked opportunities from top companies
-            </p>
-          </div>
-          
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                  selectedCategory === cat 
-                  ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md' 
-                  : 'bg-white text-slate-700 border border-slate-200 hover:border-indigo-300'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {filteredInternships.map(internship => (
-              <InternshipCard key={internship.id} internship={internship} />
+              <motion.div layout key={internship.id}>
+                <InternshipCard internship={internship} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="mt-12 text-center">
-            <Link 
-              to="/internships"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white border-2 border-slate-200 text-slate-700 font-semibold rounded-xl hover:border-indigo-600 hover:text-indigo-600 transition-all group shadow-sm hover:shadow-md"
-            >
-              View All Internships
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+          <div className="mt-16 text-center">
+            <Link to="/internships" className="inline-flex items-center gap-2 px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all shadow-xl">
+              Explore 500+ More Roles
+              <ArrowRight size={20} />
             </Link>
           </div>
         </div>
+      </section>
 
-        {/* Trust & Safety Score Section */}
-        <div className="mt-24 pt-16 border-t border-slate-100">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-slate-900 mb-4">Trust & Safety Metrics</h3>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Rated higher than other internship platforms
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl border border-slate-200 p-8">
-                <div className="text-center">
-                  <div className="text-4xl mb-4">🛡️</div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-3">Platform Safety Score</h4>
-                  <div className="text-5xl font-bold text-emerald-600 mb-4">9.2/10</div>
-                  <p className="text-slate-600 mb-6">Higher than industry average of 7.5</p>
-                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-emerald-500 to-green-500 w-[92%]"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-2xl border border-slate-200 p-8">
-                <div className="text-center">
-                  <div className="text-4xl mb-4">📈</div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-3">Tracxn Recognition</h4>
-                  <div className="text-3xl font-bold text-indigo-600 mb-4">Top 10 EdTech</div>
-                  <p className="text-slate-600 mb-6">Featured in 2024 EdTech Startup Report</p>
-                  <div className="text-sm text-slate-500">
-                    "Fastest growing internship platform"
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-2xl border border-slate-200 p-8">
-                <div className="text-center">
-                  <div className="text-4xl mb-4">👥</div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-3">Founder Endorsements</h4>
-                  <div className="space-y-4">
-                    <p className="text-slate-600 italic">
-                      "Internadda's skill-first approach is revolutionizing hiring."
-                    </p>
-                    <div className="font-semibold text-slate-900">
-                      - Startup Founder, Y Combinator
-                    </div>
-                  </div>
+      {/* Testimonials - Modern Slider Style Look */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mb-8 leading-tight">
+                Real Stories from <br /> 
+                <span className="text-indigo-600">Internadda Achievers</span>
+              </h2>
+              <div className="space-y-6">
+                <div className="flex gap-4 p-6 bg-indigo-50 rounded-3xl border border-indigo-100">
+                   <div className="text-4xl italic text-indigo-300">"</div>
+                   <div>
+                     <p className="text-lg text-slate-700 font-medium mb-4">
+                       The assessment was challenging but fair. Within 48 hours, I was talking to the CTO of a top startup. Internadda is a game changer!
+                     </p>
+                     <div className="font-bold text-slate-900">Rahul Sharma</div>
+                     <div className="text-sm text-indigo-600 font-bold uppercase tracking-wider">SWE Intern @ Google</div>
+                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Dynamic Offer Letter Section */}
-        <div className="mt-24 pt-16 border-t border-slate-100">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-blue-50 px-4 py-2 rounded-full text-sm font-bold text-indigo-700 mb-6">
-              <span className="flex h-2 w-2 rounded-full bg-indigo-600 animate-ping"></span>
-              Official Selection Letter
-            </div>
-            <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-8">Get Your Personalized Offer Letter</h3>
-            
-            <div className="relative group rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(8,_112,_184,_0.1)] border-8 border-white">
-              <iframe 
-                src="/offer-letter.html" 
-                className="w-full h-[600px] border-0"
-                title="Offer Letter Preview"
+            <div className="relative">
+              <div className="aspect-square bg-gradient-to-br from-indigo-100 to-white rounded-[40px] rotate-3 absolute inset-0 -z-10" />
+              <img 
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Students working" 
+                className="rounded-[40px] shadow-2xl -rotate-3 hover:rotate-0 transition-transform duration-500 object-cover h-[500px] w-full"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-12">
-                <Link 
-                  to="/offer-letter"
-                  className="bg-white text-indigo-600 px-6 py-3 rounded-full font-bold shadow-xl hover:bg-indigo-50 transition-colors"
-                >
-                  Generate Your Offer Letter
-                </Link>
+              <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-2xl border border-slate-100 flex items-center gap-4">
+                <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white">
+                  <Star fill="currentColor" />
+                </div>
+                <div>
+                  <div className="font-black text-2xl text-slate-900">4.9/5</div>
+                  <div className="text-sm font-bold text-slate-500">Average Student Rating</div>
+                </div>
               </div>
             </div>
-            
-            <p className="mt-8 text-slate-500 max-w-xl mx-auto text-lg leading-relaxed">
-              Upon successful assessment, you'll receive a personalized, industry-recognized offer letter to boost your professional portfolio.
-            </p>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* CTA Section - Radical Design */}
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto bg-slate-900 rounded-[50px] p-12 lg:p-20 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/20 blur-[80px] -mr-32 -mt-32" />
+          <div className="relative z-10">
+            <h2 className="text-4xl lg:text-6xl font-black text-white mb-8">Ready to start your professional journey?</h2>
+            <p className="text-indigo-200 text-xl mb-12 max-w-2xl mx-auto">Join the exclusive community of high-skilled interns and get recruited by top-tier companies today.</p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link to="/signup" className="px-12 py-5 bg-white text-slate-900 rounded-2xl font-black text-xl hover:scale-105 transition-transform shadow-2xl shadow-white/10">
+                Create Free Account
+              </Link>
+              <Link to="/about" className="px-12 py-5 bg-slate-800 text-white rounded-2xl font-black text-xl border border-slate-700 hover:bg-slate-700 transition-all">
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
