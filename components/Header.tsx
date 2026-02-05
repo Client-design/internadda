@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { 
   Menu, X, Briefcase, GraduationCap, ChevronRight, 
-  Settings, LogOut, User as UserIcon, Bell, Search,
-  Home as HomeIcon, Info, BookOpen
+  Settings, LogOut, User as UserIcon, Bell, Home as HomeIcon, 
+  Info, BookOpen 
 } from "lucide-react";
 import { User } from "../types";
 
@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Logo URL for direct embedding
+  // Direct Direct Link for Google Drive Logo
   const logoUrl = "https://drive.google.com/uc?export=view&id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa";
 
   useEffect(() => {
@@ -53,14 +53,15 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-        scrolled || mobileMenuOpen ? "bg-white shadow-md py-1" : "bg-white/80 backdrop-blur-md py-2"
+        scrolled || mobileMenuOpen ? "bg-white shadow-md py-1" : "bg-white/90 backdrop-blur-md py-2"
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo & Brand Section */}
+          
+          {/* Logo & Stylish Brand Section */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden rounded-lg">
+            <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden">
               <img 
                 src={logoUrl} 
                 alt="Internadda Logo" 
@@ -74,8 +75,8 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               <span className="text-2xl font-black tracking-tighter leading-none text-slate-900 group-hover:text-indigo-600 transition-colors">
                 INTERN<span className="text-indigo-600">ADDA</span>
               </span>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">
-                India's Adda for Opportunities
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">
+                India's Adda for Internships
               </span>
             </div>
           </Link>
@@ -86,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-bold tracking-tight transition-all hover:text-indigo-600 relative py-2 ${
+                className={`text-sm font-bold transition-all hover:text-indigo-600 relative py-2 ${
                   isActive(link.path) ? "text-indigo-600 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600" : "text-slate-600"
                 }`}
               >
@@ -99,13 +100,10 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           <div className="hidden lg:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center space-x-4">
-                <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
-                  <Bell className="w-5 h-5" />
-                </button>
                 <Link to="/profile" className="flex items-center space-x-3 pl-4 border-l border-slate-200 group">
                   <div className="text-right">
                     <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600">{user.name}</p>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{user.role}</p>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase">{user.role}</p>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-indigo-50 border-2 border-indigo-100 flex items-center justify-center overflow-hidden group-hover:border-indigo-600 transition-colors">
                     <UserIcon className="w-5 h-5 text-indigo-600" />
@@ -117,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                 <Link to="/login" className="px-5 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                   Sign In
                 </Link>
-                <Link to="/signup" className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 hover:-translate-y-0.5 active:translate-y-0">
+                <Link to="/signup" className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 hover:-translate-y-0.5">
                   Get Started
                 </Link>
               </div>
@@ -147,11 +145,11 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
         >
           <div className="p-6 border-b flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="font-black text-slate-900">INTERNADDA</span>
-              <span className="text-[9px] font-bold text-slate-400 tracking-tighter italic">INDIA'S ADDA FOR INTERNSHIP</span>
+              <span className="font-black text-slate-900 text-lg">INTERNADDA</span>
+              <span className="text-[9px] font-bold text-slate-400 tracking-tighter">INDIA'S ADDA FOR INTERNSHIPS</span>
             </div>
-            <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-50 rounded-lg">
-              <X className="w-5 h-5 text-slate-400" />
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-50 rounded-lg text-slate-400">
+              <X className="w-5 h-5" />
             </button>
           </div>
 
@@ -185,7 +183,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                 </Link>
                 <button
                   onClick={() => { onLogout(); setMobileMenuOpen(false); }}
-                  className="w-full flex items-center justify-center space-x-2 py-4 text-red-600 rounded-xl font-bold text-sm border-2 border-red-50 border-dashed hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 py-4 text-red-600 rounded-xl font-bold text-sm border-2 border-red-50 border-dashed hover:bg-red-50"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Log Out</span>
