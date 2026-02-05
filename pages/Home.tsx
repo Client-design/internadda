@@ -51,27 +51,29 @@ const Home: React.FC = () => {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 lg:pt-20 pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="space-y-8">
+            {/* Left Column: Text Content - Centered for Mobile */}
+            <div className="space-y-8 text-center lg:text-left">
               <div>
-                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-indigo-700 mb-6 border border-indigo-100 shadow-sm">
+                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-indigo-700 mb-6 border border-indigo-100 shadow-sm mx-auto lg:mx-0">
                   <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                   Trusted by {stats.companies} Top Companies
                 </div>
                 <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
                   Launch Your Career with{' '}
-                  <span className="relative">
+                  <span className="relative inline-block lg:inline">
                     <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">
-                      Guaranteed Internships
+                      Premium Internships
                     </span>
                     <span className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-blue-500/20 blur-xl"></span>
                   </span>
                 </h1>
-                <p className="text-lg text-slate-600 mt-6 leading-relaxed">
+                <p className="text-lg text-slate-600 mt-6 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                   Join 7,000+ students who transformed their careers through skill-based assessments and direct industry connections.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* Action Buttons - Centered for Mobile */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link 
                   to="/signup"
                   className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-8 py-3.5 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group relative overflow-hidden"
@@ -90,7 +92,7 @@ const Home: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Stats */}
+              {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-8">
                 {[
                   { label: 'Active Internships', value: stats.internships, color: 'text-indigo-600' },
@@ -110,7 +112,7 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* Hero Image */}
+            {/* Right Column: Hero Image/Feature Card */}
             <div className="relative">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 rounded-3xl blur-xl"></div>
@@ -136,8 +138,8 @@ const Home: React.FC = () => {
                   
                   <div className="space-y-4">
                     {features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                        <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center text-2xl shadow-sm">
+                      <div key={idx} className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 text-left">
+                        <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center text-2xl shadow-sm flex-shrink-0">
                           {feature.icon}
                         </div>
                         <div>
