@@ -19,6 +19,7 @@ import TeamPage from "./pages/TeamPage";
 import HiringProcess from "./pages/HiringProcess";
 import AboutUs from "./pages/AboutUs";
 import { User } from "./types";
+import OfferLetterPage from './pages/OfferLetterPage';
 
 /* Scroll To Top */
 const ScrollToTop = () => {
@@ -123,6 +124,7 @@ const App: React.FC = () => {
             <Route path="/team" element={<TeamPage />} />
             <Route path="/hiring-process" element={<HiringProcess />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/offer-letter" element={<OfferLetterPage />} />
 
             <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
