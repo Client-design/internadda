@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   CheckCircle2, Users, Building2, ArrowRight, 
@@ -11,6 +11,21 @@ import { MOCK_INTERNSHIPS, CATEGORIES } from '../constants';
 
 const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Internships');
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Slider images for achievements/collaborations
+  const sliderImages = [
+    "https://drive.google.com/file/d/1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx/view?usp=drive_link",
+    "https://drive.google.com/file/d/1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27/view?usp=drive_link"
+  ];
+
+  // Auto-slide logic
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === sliderImages.length - 1 ? 0 : prev + 1));
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [sliderImages.length]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -19,6 +34,14 @@ const Home: React.FC = () => {
   const filteredInternships = selectedCategory === 'All Internships' 
     ? MOCK_INTERNSHIPS 
     : MOCK_INTERNSHIPS.filter(i => i.category === selectedCategory);
+
+  // Real Indian student face representation
+  const students = [
+    { name: "Rahul", color: "bg-orange-100 text-orange-700" },
+    { name: "Priya", color: "bg-blue-100 text-blue-700" },
+    { name: "Amit", color: "bg-emerald-100 text-emerald-700" },
+    { name: "Neha", color: "bg-purple-100 text-purple-700" }
+  ];
 
   return (
     <div className="bg-[#F8FAFC]">
@@ -51,43 +74,58 @@ const Home: React.FC = () => {
                 </Link>
               </div>
 
+              {/* Updated Indian Students Section */}
               <div className="mt-8 flex items-center gap-6 text-slate-400">
                 <div className="flex -space-x-2">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">U{i}</div>
+                  {students.map((s, i) => (
+                    <div key={i} className={`w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-sm ${s.color}`}>
+                      {s.name[0]}
+                    </div>
                   ))}
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-widest">7,000+ Students Placed</p>
               </div>
             </div>
 
-            {/* Platform Snapshot (Look Trustworthy) */}
-            <div className="hidden lg:block bg-slate-50 rounded-2xl border border-slate-200 p-6 shadow-inner">
-               <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                  <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Live Hiring Dashboard</span>
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                      <div className="w-2 h-2 rounded-full bg-amber-400"></div>
-                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
-                    </div>
+            {/* Achievement Slider - Replaced Hiring Dashboard */}
+            <div className="hidden lg:block relative group">
+               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xl aspect-[4/3] flex items-center justify-center relative">
+                  <div className="absolute top-4 left-4 z-10">
+                    <span className="px-2 py-1 bg-white/90 backdrop-blur shadow-sm rounded text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
+                      New Achievements
+                    </span>
                   </div>
-                  <div className="p-4 space-y-3">
-                    {[
-                      { company: "TCS Ion", role: "Web Dev", status: "Interviewing", color: "text-blue-600" },
-                      { company: "Zomato", role: "Marketing", status: "Shortlisting", color: "text-emerald-600" },
-                      { company: "Unacademy", role: "Content", status: "Active", color: "text-indigo-600" }
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center justify-between text-xs p-2 rounded border border-slate-50 hover:bg-slate-50 transition-colors">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 bg-slate-100 rounded flex items-center justify-center font-bold text-[10px]">{item.company[0]}</div>
-                          <div>
-                            <div className="font-bold text-slate-800">{item.company}</div>
-                            <div className="text-slate-400">{item.role}</div>
-                          </div>
-                        </div>
-                        <div className={`font-bold ${item.color}`}>{item.status}</div>
+                  
+                  <AnimatePresence mode='wait'>
+                    <motion.div
+                      key={currentSlide}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-full h-full flex items-center justify-center bg-slate-50"
+                    >
+                      {/* Note: Google Drive links might need a proxy or direct link to display in <img> tags */}
+                      <div className="text-center p-8">
+                        <p className="text-slate-400 text-xs mb-2">Displaying achievement {currentSlide + 1}</p>
+                        <a 
+                          href={sliderImages[currentSlide]} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-indigo-600 font-bold hover:underline text-sm"
+                        >
+                          View Official Collaboration Proof →
+                        </a>
                       </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  <div className="absolute bottom-4 right-4 flex gap-1.5">
+                    {sliderImages.map((_, i) => (
+                      <div 
+                        key={i} 
+                        className={`w-1.5 h-1.5 rounded-full transition-all ${currentSlide === i ? 'bg-indigo-600 w-4' : 'bg-slate-300'}`}
+                      />
                     ))}
                   </div>
                </div>
@@ -96,7 +134,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. INDUSTRY METRICS - CLEAN & DATA-DRIVEN */}
+      {/* 2. INDUSTRY METRICS */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -149,7 +187,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. VERIFICATION WORKFLOW (The "Real" Factor) */}
+      {/* 4. VERIFICATION WORKFLOW */}
       <section className="py-16 bg-slate-900 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
