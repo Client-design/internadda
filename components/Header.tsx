@@ -62,14 +62,14 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           {/* Logo & Stylish Brand Section */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden">
-              <img 
-                src="https://drive.google.com/file/d/117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa/view?usp=drive_link"
-                alt="Internadda Logo" 
-                className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "https://via.placeholder.com/50?text=I";
-                }}
-              />
+            <img 
+              src="https://lh3.googleusercontent.com/d/117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa"
+              alt="Internadda Logo" 
+              className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://via.placeholder.com/50?text=I";
+              }}
+            />
             </div>
             <div className="flex flex-col">
               <span className="text-2xl font-black tracking-tighter leading-none text-slate-900 group-hover:text-indigo-600 transition-colors">
