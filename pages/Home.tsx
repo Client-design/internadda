@@ -13,15 +13,12 @@ const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Internships');
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Slider images for achievements/collaborations
-  // Aap yahan naye links add kar sakte hain, slider apne aap adjust ho jayega
-    // Slider images for achievements/collaborations
-    const sliderImages = [
-      "https://drive.google.com/uc?export=view&id=1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx",
-      "https://drive.google.com/uc?export=view&id=1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27"
-    ];
+  // Slider images (Drive direct links)
+  const sliderImages = [
+    "https://drive.google.com/uc?export=view&id=1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx",
+    "https://drive.google.com/uc?export=view&id=1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27"
+  ];
 
-  // Auto-slide logic
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev === sliderImages.length - 1 ? 0 : prev + 1));
@@ -37,7 +34,6 @@ const Home: React.FC = () => {
     ? MOCK_INTERNSHIPS 
     : MOCK_INTERNSHIPS.filter(i => i.category === selectedCategory);
 
-  // Real Indian student face images (Stock)
   const students = [
     { name: "Rahul", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=100&auto=format&fit=crop" },
     { name: "Priya", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" },
@@ -47,99 +43,72 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#F8FAFC]">
-      {/* 1. COMPACT NAV-HERO */}
+
+      {/* HERO */}
       <section className="relative pt-12 pb-20 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-xs mb-6 uppercase tracking-wider">
-                <CheckCircle2 size={14} /> 
-                MSME Registered: UDYAM-MH-08-XXXXXXXX
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-[1.1] mb-6">
-                India's Largest Dedicated <br/>
-                <span className="text-indigo-600">Internship Ecosystem.</span>
-              </h1>
-              
-              <p className="text-base text-slate-500 max-w-lg mb-8 leading-relaxed">
-                Skip the generic job boards. Access a streamlined pipeline of 150+ verified corporate partners. 
-                Focus on skill-based hiring with transparent stipends and direct interviews.
-              </p>
+        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
 
-              <div className="flex flex-wrap gap-4">
-                <Link to="/internships" className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold text-sm hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm">
-                  Find Internships <ArrowRight size={16} />
-                </Link>
-                {/* Updated Button to Practice Mode */}
-                <Link to="/tests" className="px-6 py-3 bg-white text-slate-700 border border-slate-300 rounded-lg font-bold text-sm hover:bg-slate-50 transition-all">
-                  Practice Mode
-                </Link>
-              </div>
-
-              {/* Real Student Images */}
-              <div className="mt-8 flex items-center gap-6 text-slate-400">
-                <div className="flex -space-x-2">
-                  {students.map((s, i) => (
-                    <img 
-                      key={i} 
-                      src={s.img} 
-                      alt={s.name}
-                      className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm"
-                    />
-                  ))}
-                </div>
-                <p className="text-xs font-semibold uppercase tracking-widest">7,000+ Students Placed</p>
-              </div>
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 border text-emerald-700 font-bold text-xs mb-6 uppercase">
+              <CheckCircle2 size={14} /> MSME Registered
             </div>
 
-            {/* Achievement Slider */}
-            <div className="hidden lg:block relative group">
-               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xl aspect-[4/3] flex items-center justify-center relative">
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="px-2 py-1 bg-white/90 backdrop-blur shadow-sm rounded text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
-                      Our Collaborations
-                    </span>
-                  </div>
-                  
-                  <AnimatePresence mode='wait'>
-                    <motion.div
-                      key={currentSlide}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.05 }}
-                      transition={{ duration: 0.5 }}
-                      className="w-full h-full"
-                    >
-                      {/* Image source dynamic using the array */}
-                      <img 
-                        src={sliderImages[currentSlide]} 
-                        alt="Achievement"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center bg-slate-50/10">
-                         <a href={sliderImages[currentSlide]} target="_blank" className="bg-white/80 px-4 py-2 rounded-lg text-xs font-bold text-indigo-600 shadow-sm">View Achievement Proof</a>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+            <h1 className="text-4xl font-extrabold mb-6">
+              India's Largest <span className="text-indigo-600">Internship Ecosystem</span>
+            </h1>
 
-                  <div className="absolute bottom-4 right-4 flex gap-1.5">
-                    {sliderImages.map((_, i) => (
-                      <div 
-                        key={i} 
-                        className={`w-1.5 h-1.5 rounded-full transition-all ${currentSlide === i ? 'bg-indigo-600 w-4' : 'bg-slate-300'}`}
-                      />
-                    ))}
-                  </div>
-               </div>
+            <p className="text-slate-500 mb-8">
+              Access 150+ verified partners with transparent stipends & interviews.
+            </p>
+
+            <div className="flex gap-4">
+              <Link to="/internships" className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold">
+                Find Internships <ArrowRight size={16} />
+              </Link>
+              <Link to="/tests" className="px-6 py-3 border rounded-lg font-bold">
+                Practice Mode
+              </Link>
+            </div>
+
+            <div className="mt-8 flex items-center gap-4">
+              {students.map((s, i) => (
+                <img key={i} src={s.img} className="w-10 h-10 rounded-full border-2 border-white" />
+              ))}
+              <span className="text-xs font-bold text-slate-400">7,000+ Students Placed</span>
             </div>
           </div>
+
+          {/* ACHIEVEMENT SLIDER */}
+          <div className="hidden lg:block">
+            <div className="bg-white rounded-2xl border shadow-xl aspect-[4/3] overflow-hidden relative">
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-full h-full relative"
+                >
+                  <img
+                    src={sliderImages[currentSlide]}
+                    className="w-full h-full object-cover"
+                  />
+
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                    <span className="bg-white px-4 py-2 rounded-lg text-xs font-bold text-indigo-600">
+                      Verified Collaboration
+                    </span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+            </div>
+          </div>
+
         </div>
       </section>
-
       {/* 2. INDUSTRY METRICS */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
