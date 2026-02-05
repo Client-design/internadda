@@ -52,7 +52,7 @@ const Home: React.FC = () => {
             <div className="text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-xs mb-6 uppercase tracking-wider">
                 <CheckCircle2 size={14} /> 
-                MSME Registered: UDYAM-MH-08-1234567
+                MSME Registered: UDYAM-MH-08-XXXXXXXX
               </div>
               
               <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-[1.1] mb-6">
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
                       className="w-full h-full"
                     >
                       <img 
-                        src={sliderImages[currentSlide]} 
+                        src="https://drive.google.com/file/d/1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx/view?usp=drive_link"
                         alt="Achievement"
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -145,8 +145,8 @@ const Home: React.FC = () => {
             {[
               { label: 'Active Roles', value: '300+', icon: Briefcase },
               { label: 'Corporate Partners', value: '150+', icon: Building2 },
-              { label: 'Avg. Stipend', value: '₹12,500', icon: Award },
-              { label: 'Hiring Time', value: '48 Hours', icon: Clock },
+              { label: 'Avg. Stipend', value: '₹6,500', icon: Award },
+              { label: 'Hiring Time', value: '72 Hours', icon: Clock },
             ].map((stat, i) => (
               <div key={i} className="flex items-center gap-4">
                 <div className="p-2 bg-slate-50 rounded-lg text-indigo-600 border border-slate-100"><stat.icon size={20} /></div>
@@ -225,13 +225,13 @@ const Home: React.FC = () => {
                </p>
                <div className="mt-6 flex items-center gap-4">
                   <img 
-                    src="https://drive.google.com/file/d/12p0wO__YLIPYjABT1VmbA7wCgXrSlJyi/view?usp=drive_link" 
-                    alt="Arjun Mehta" 
+                    src="https://s3-symbol-logo.tradingview.com/tracxn-technologies-ltd--600.png"
+                    alt="Tracxn" 
                     className="w-12 h-12 rounded-full object-cover border-2 border-indigo-500"
                   />
                   <div>
-                    <div className="text-sm font-bold">Arjun Mehta</div>
-                    <div className="text-xs text-slate-500 font-medium">Founder, TechScale Solutions</div>
+                    <div className="text-sm font-bold">Tracxn</div>
+                    <div className="text-xs text-slate-500 font-medium">Leading Startup Data Platform</div>
                   </div>
                </div>
             </div>
