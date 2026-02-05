@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden">
               <img 
-                src={https://drive.google.com/file/d/117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa/view?usp=drive_link} 
+                src="https://drive.google.com/file/d/117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa/view?usp=drive_link"
                 alt="Internadda Logo" 
                 className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
                 onError={(e) => {
