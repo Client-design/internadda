@@ -12,10 +12,10 @@ const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Internships');
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // 1. FIXED SLIDER IMAGES (Direct Links for auto-display)
+  // 1. SLIDER IMAGES (Direct Link Format used for auto-display)
   const sliderImages = [
-    "https://drive.google.com/uc?export=view&id=1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27",
-    "https://drive.google.com/uc?export=view&id=1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx"
+    "https://drive.google.com/uc?id=1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27",
+    "https://drive.google.com/uc?id=1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx"
   ];
 
   // Auto-slide logic
@@ -34,6 +34,7 @@ const Home: React.FC = () => {
     ? MOCK_INTERNSHIPS 
     : MOCK_INTERNSHIPS.filter(i => i.category === selectedCategory);
 
+  // Student Stock Images
   const students = [
     { name: "Rahul", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=100&auto=format&fit=crop" },
     { name: "Priya", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" },
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#F8FAFC]">
-      {/* 1. COMPACT NAV-HERO */}
+      {/* 1. HERO SECTION */}
       <section className="relative pt-12 pb-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -59,8 +60,7 @@ const Home: React.FC = () => {
               </h1>
               
               <p className="text-base text-slate-500 max-w-lg mb-8 leading-relaxed">
-                Skip the generic job boards. Access a streamlined pipeline of 150+ verified corporate partners. 
-                Focus on skill-based hiring with transparent stipends and direct interviews.
+                Skip generic job boards. Access verified corporate partners with transparent stipends and direct interviews.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -82,10 +82,10 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* AUTOMATIC ACHIEVEMENT SLIDER */}
+            {/* 2. AUTO-SLIDER (Proper Look) */}
             <div className="hidden lg:block relative group">
                <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xl aspect-[4/3] relative">
-                  <div className="absolute top-4 left-4 z-10">
+                  <div className="absolute top-4 left-4 z-20">
                     <span className="px-2 py-1 bg-white/90 backdrop-blur shadow-sm rounded text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
                       Our Collaborations
                     </span>
@@ -94,27 +94,28 @@ const Home: React.FC = () => {
                   <AnimatePresence mode='wait'>
                     <motion.div
                       key={currentSlide}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.5 }}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6 }}
                       className="w-full h-full"
                     >
-                      {/* Image renders directly on website now */}
                       <img 
                         src={sliderImages[currentSlide]} 
-                        alt="Achievement Display"
+                        alt="Achievement"
                         className="w-full h-full object-cover"
+                        loading="eager"
                         onError={(e) => {
-                          e.currentTarget.src = "https://via.placeholder.com/800x600?text=Collaboration+Image";
+                          e.currentTarget.src = "https://via.placeholder.com/800x600?text=Internadda+Achievement";
                         }}
                       />
                     </motion.div>
                   </AnimatePresence>
 
-                  <div className="absolute bottom-4 right-4 flex gap-1.5">
+                  {/* Dot Indicators */}
+                  <div className="absolute bottom-4 right-4 flex gap-1.5 z-20">
                     {sliderImages.map((_, i) => (
-                      <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all ${currentSlide === i ? 'bg-indigo-600 w-4' : 'bg-slate-300'}`} />
+                      <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${currentSlide === i ? 'bg-indigo-600 w-4' : 'bg-slate-300'}`} />
                     ))}
                   </div>
                </div>
@@ -123,7 +124,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. INDUSTRY METRICS */}
+      {/* METRICS & REST OF THE PAGE */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -134,7 +135,7 @@ const Home: React.FC = () => {
               { label: 'Hiring Time', value: '72 Hours', icon: Clock },
             ].map((stat, i) => (
               <div key={i} className="flex items-center gap-4">
-                <div className="p-2 bg-slate-50 rounded-lg text-indigo-600 border border-slate-100"><stat.icon size={20} /></div>
+                <div className="p-2 bg-slate-50 rounded-lg text-indigo-600"><stat.icon size={20} /></div>
                 <div>
                   <div className="text-lg font-bold text-slate-900">{stat.value}</div>
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{stat.label}</div>
@@ -145,16 +146,12 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. INTERNSHIP MARKETPLACE */}
-      <section className="py-16 max-w-7xl mx-auto px-4" id="internships">
+      <section className="py-16 max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-          <div className="text-center md:text-left">
-            <h2 className="text-2xl font-bold text-slate-900">Current Openings</h2>
-            <p className="text-sm text-slate-500">Verified and updated every 6 hours</p>
-          </div>
+          <h2 className="text-2xl font-bold text-slate-900">Current Openings</h2>
           <div className="flex flex-wrap gap-2 justify-center">
             {CATEGORIES.map(cat => (
-              <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-all ${selectedCategory === cat ? 'bg-slate-900 text-white' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'}`}>{cat}</button>
+              <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-1.5 rounded-full text-xs font-bold border ${selectedCategory === cat ? 'bg-slate-900 text-white' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'}`}>{cat}</button>
             ))}
           </div>
         </div>
@@ -165,56 +162,14 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. TRACXN TESTIMONIAL SECTION */}
-      <section className="py-16 bg-slate-900 text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">How we ensure quality.</h2>
-              <div className="space-y-6">
-                {[
-                  { title: "Manual Employer Audit", desc: "Every company is verified through MCA/MSME records.", icon: FileCheck },
-                  { title: "Direct Interview Routing", desc: "Assessment goes directly to the decision maker.", icon: Zap },
-                  { title: "Certificate Ledger", desc: "Recognized certificates with unique ID.", icon: Award }
-                ].map((step, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="mt-1 text-indigo-400"><step.icon size={20} /></div>
-                    <div>
-                      <h4 className="font-bold text-sm uppercase tracking-wider">{step.title}</h4>
-                      <p className="text-slate-400 text-sm mt-1 leading-relaxed">{step.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-8 text-left">
-               <div className="flex items-center gap-2 mb-6">
-                  <Globe size={16} className="text-indigo-400" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Global Recognition</span>
-               </div>
-               <p className="text-xl font-medium text-slate-300 italic">
-                 "Internadda has built a transparent ecosystem that significantly reduces hiring friction for early-stage startups."
-               </p>
-               <div className="mt-6 flex items-center gap-4">
-                  <img src="https://s3-symbol-logo.tradingview.com/tracxn-technologies-ltd--600.png" alt="Tracxn" className="w-12 h-12 rounded-full object-cover border-2 border-indigo-500" />
-                  <div>
-                    <div className="text-sm font-bold">Tracxn</div>
-                    <div className="text-xs text-slate-500 font-medium">Leading Startup Data Platform</div>
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. FOOTER CTA */}
+      {/* FOOTER CTA */}
       <section className="py-12 bg-white border-t border-slate-100 text-center">
         <div className="flex justify-center gap-4 mb-8">
            <Link to="/signup" className="text-xs font-bold uppercase tracking-widest bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700 transition-colors">Apply Now</Link>
-           <Link to="/hiring" className="text-xs font-bold uppercase tracking-widest border border-slate-200 px-6 py-3 rounded hover:bg-slate-50 transition-all">Partner with Us</Link>
+           <Link to="/hiring" className="text-xs font-bold uppercase tracking-widest border border-slate-200 px-6 py-3 rounded hover:bg-slate-50 transition-colors">Partner with Us</Link>
         </div>
-        <div className="flex justify-center gap-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          <span className="flex items-center gap-1"><Check size={12}/> 100% Free for Students</span>
+        <div className="flex justify-center gap-8 text-[10px] font-bold text-slate-400 uppercase">
+          <span className="flex items-center gap-1"><Check size={12}/> 100% Free</span>
           <span className="flex items-center gap-1"><Check size={12}/> No Ghosting Policy</span>
         </div>
       </section>
