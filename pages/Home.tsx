@@ -16,8 +16,8 @@ const Home: React.FC = () => {
 
   // Slider images - using reliable Unsplash images
   const sliderImages = [
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=2070&auto=format&fit=crop"
+    "https://drive.google.com/file/d/1FgSK-yi7D73JZZx_EHGzvN5YAokwMMNx/view?usp=drive_link",
+    "https://drive.google.com/file/d/1tiWKmhhoO3UoNk9pRus8apZX0p2qxo27/view?usp=drive_link"
   ];
 
   // Alternative backup images
