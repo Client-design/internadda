@@ -28,11 +28,19 @@ const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
     "₹3,000 - ₹7,000"  // For ID 3
   ];
 
+  // 4. Company Name Sequence (Replacing generic "Corporate Partner")
+  const COMPANY_NAMES = [
+    "Arjuna-ai Solutions", // Name for Index 1
+    "Internadda Enterprise",      // Name for Index 2
+    "Internadda Enterprise"      // Name for Index 3
+  ];
+
   // Sequence logic: ID ke basis par resources pick karna
   const itemIndex = (Number(internship.id) - 1) % 3;
   const selectedImage = CARD_IMAGES[itemIndex];
   const selectedLogo = COMPANY_LOGOS[itemIndex];
   const selectedStipend = STIPENDS[itemIndex];
+  const selectedCompanyName = COMPANY_NAMES[itemIndex];
 
   // Applications count state (130-150 range)
   const [applications, setApplications] = useState(
@@ -79,12 +87,13 @@ const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
         <div className="flex items-center gap-3 mb-4">
           <img 
             src={selectedLogo} 
-            alt={internship.company}
+            alt={selectedCompanyName}
             className="w-10 h-10 rounded-lg border border-slate-100 object-contain p-1 bg-white shadow-sm"
           />
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-tight">Hiring At</span>
-            <h4 className="text-sm font-bold text-slate-800 leading-none">{internship.company}</h4>
+            {/* Displaying the sequenced company name instead of the prop data */}
+            <h4 className="text-sm font-bold text-slate-800 leading-none">{selectedCompanyName}</h4>
           </div>
         </div>
         
