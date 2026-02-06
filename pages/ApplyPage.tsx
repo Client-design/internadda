@@ -42,36 +42,44 @@ const ApplyPage: React.FC<{ user: any }> = ({ user }) => {
     return `INTERNADDA_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep('payment');
-    
-    const newOrderId = generateOrderId();
-    setOrderId(newOrderId);
+// pages/ApplyPage.tsx
 
-    try {
-      const paymentData = await cashfree.createOrder(newOrderId, 199, {
-        id: user?.id || 'guest',
-        email: formData.email,
-        phone: formData.phone,
-        name: formData.fullName
-      });
+const handleFormSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setStep('payment');
+  
+  const newOrderId = generateOrderId();
+  setOrderId(newOrderId);
 
+  try {
+    // Ensure we have a valid customer ID for Cashfree
+    const customerId = user?.id || `guest_${Date.now()}`; 
+
+    const paymentData = await cashfree.createOrder(newOrderId, 199, {
+      id: customerId,
+      email: formData.email,
+      phone: formData.phone,
+      name: formData.fullName
+    });
+
+    if (paymentData && paymentData.payment_link) {
       setPaymentLink(paymentData.payment_link);
       
-      // Store application data temporarily
       localStorage.setItem(`application_${newOrderId}`, JSON.stringify({
         internshipId: id,
         formData,
-        userId: user?.id
+        userId: customerId
       }));
-
-    } catch (error) {
-      console.error('Payment setup failed:', error);
-      alert('Payment setup failed. Please try again.');
-      setStep('form');
+    } else {
+      throw new Error("No payment link received");
     }
-  };
+
+  } catch (error) {
+    console.error('Payment setup failed:', error);
+    alert('Payment setup failed: Please ensure API keys are valid and CORS is handled.');
+    setStep('form');
+  }
+};
 
   const handlePaymentSuccess = async () => {
     setStep('processing');
