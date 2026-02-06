@@ -47,11 +47,19 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (user) localStorage.setItem("user", JSON.stringify(user));
-    else localStorage.removeItem("user");
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
   }, [user]);
 
-  const handleLogout = () => setUser(null);
+  // FIX: Logout handling with explicit storage clearing and redirect
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    window.location.hash = "#/login";
+  };
 
   /* 🔥 PRELOADER */
   if (isLoading) {
@@ -128,7 +136,10 @@ const App: React.FC = () => {
 
             <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
-            <Route path="/settings" element={user ? <Settings user={user} /> : <Navigate to="/login" />} />
+            
+            {/* UPDATED: Passing setUser to Settings to fix data update error */}
+            <Route path="/settings" element={user ? <Settings user={user} setUser={setUser} /> : <Navigate to="/login" />} />
+            
             <Route path="/apply/:id" element={user ? <ApplyPage user={user} /> : <Navigate to="/login" />} />
             <Route path="/payment/:id" element={user ? <PaymentPage user={user} /> : <Navigate to="/login" />} />
             <Route path="/test/:id" element={user ? <TestEngine user={user} /> : <Navigate to="/login" />} />
