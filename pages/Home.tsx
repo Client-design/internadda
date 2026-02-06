@@ -15,10 +15,9 @@ const Home: React.FC = () => {
   const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(Array(2).fill(false));
 
   const sliderImages = [
-    "https://freeimage.host/i/fbunvBR",
-    "https://freeimage.host/i/fbuneLv",
-    "https://freeimage.host/i/fbukx1a",
-    "https://freeimage.host/i/fbukYXt"
+    "https://iili.io/fbunvBR.png",
+    "https://iili.io/fbuneLv.png",
+    "https://iili.io/fbukYXt.png"
   ];
 
   const backupImages = [
