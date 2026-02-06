@@ -17,6 +17,7 @@ const Home: React.FC = () => {
   const sliderImages = [
     "https://iili.io/fbunvBR.png",
     "https://iili.io/fbuneLv.png",
+    "https://iili.io/fbAFUSn.md.png",
     "https://iili.io/fbukYXt.png"
   ];
 
