@@ -11,12 +11,13 @@ const PaymentPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  const handlePayment = () => {
-    setIsProcessing(true);
-    // Directly redirect to your specific Cashfree Payment Form link
-    // This bypasses CORS and API key issues by using Cashfree's hosted checkout
-    window.location.href = "https://payments.cashfree.com/forms/internadda";
-  };
+const handlePayment = () => {
+  setIsProcessing(true);
+  
+  // This is the "Magic Link" that bypasses all API, Key, and CORS issues.
+  // It sends the user directly to your Cashfree Hosted Form.
+  window.location.href = "https://payments.cashfree.com/forms/internadda";
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
