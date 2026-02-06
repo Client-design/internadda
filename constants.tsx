@@ -1,15 +1,15 @@
-
 import React from 'react';
 import { Internship, Question } from './types';
 
-export const MOCK_INTERNSHIPS: Internship[] = [
+// Renamed from MOCK_INTERNSHIPS to internships to fix build errors in ApplyPage
+export const internships: Internship[] = [
   {
     id: '1',
     title: 'Python Developer Intern',
-    company: 'Corporate Partners',
+    company: 'TechFlow Solutions',
     category: 'Python',
-    image: 'https://picsum.photos/seed/python/600/300',
-    stipend: '₹1,000 - ₹10,000 /month',
+    image: 'https://iili.io/fbAQLjn.md.png',
+    stipend: '₹2,000 - ₹8,000',
     location: 'Remote',
     type: 'Remote',
     status: 'ACTIVE',
@@ -19,10 +19,10 @@ export const MOCK_INTERNSHIPS: Internship[] = [
   {
     id: '2',
     title: 'Web Development Intern',
-    company: 'Corporate Partners',
+    company: 'Nexus Digital',
     category: 'Web Development',
-    image: 'https://picsum.photos/seed/web/600/300',
-    stipend: '₹1,000 - ₹10,000 /month',
+    image: 'https://iili.io/fbArEUF.png',
+    stipend: '₹2,500 - ₹5,000',
     location: 'Remote',
     type: 'Remote',
     status: 'ACTIVE',
@@ -32,10 +32,10 @@ export const MOCK_INTERNSHIPS: Internship[] = [
   {
     id: '3',
     title: 'Data Science Intern',
-    company: 'Corporate Partners',
+    company: 'CloudScale Inc',
     category: 'Data Science',
-    image: 'https://picsum.photos/seed/data/600/300',
-    stipend: '₹1,000 - ₹10,000 /month',
+    image: 'https://iili.io/fbAQsTX.md.png',
+    stipend: '₹3,000 - ₹7,000',
     location: 'Remote',
     type: 'Remote',
     status: 'ACTIVE',
