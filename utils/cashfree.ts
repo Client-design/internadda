@@ -11,23 +11,24 @@ export interface PaymentResponse {
 
 class CashfreePayment {
   // We now call our OWN backend API to avoid CORS and hide Secret Keys
-  async createOrder(orderId: string, amount: number, customer: any): Promise<PaymentResponse> {
-    const response = await fetch('/api/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId,
-        amount,
-        customer: {
-          customer_id: customer.id,
-          customer_email: customer.email,
-          customer_phone: customer.phone,
-          customer_name: customer.name
-        }
-      })
-    });
+// utils/cashfree.ts
+async createOrder(orderId: string, amount: number, customer: any): Promise<PaymentResponse> {
+  const response = await fetch('/api/create-order', { // This must match your file path in /api
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      orderId,
+      amount,
+      customer: {
+        id: customer.id,
+        email: customer.email,
+        phone: customer.phone,
+        name: customer.name
+      }
+    })
+  });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
