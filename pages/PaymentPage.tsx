@@ -12,23 +12,12 @@ const PaymentPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-const handlePayment = async () => {
+const handlePayment = () => {
   setIsProcessing(true);
-  try {
-    // 1. Get real internship data for the order
-    const amount = 199; 
-    
-    // 2. Call your Vercel backend API
-    const orderData = await cashfree.createOrder(
-      `order_${Date.now()}`, // Unique Order ID
-      amount,
-      {
-        id: "USER_ID_HERE", // Replace with your actual logged-in User ID
-        email: "user@example.com", 
-        phone: "9999999999",
-        name: "Lucky Tiwari"
-      }
-    );
+  
+  // Directly redirect to your specific Cashfree Payment Form link
+  window.location.href = "https://payments.cashfree.com/forms/internadda";
+};
 
     // 3. Redirect user to the Live Cashfree Payment Page
     if (orderData && orderData.payment_link) {
