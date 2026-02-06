@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { 
   Menu, X, Briefcase, GraduationCap, ChevronRight, 
   Settings, LogOut, User as UserIcon, Bell, Home as HomeIcon, 
-  Info, BookOpen 
+  Info, BookOpen, ChevronDown
 } from "lucide-react";
 import { User } from "../types";
 
@@ -14,11 +14,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false); // Desktop dropdown state
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-
-  // Direct Direct Link for Google Drive Logo
-  const logoUrl = "https://drive.google.com/uc?export=view&id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -34,12 +32,14 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
     }
   }, [mobileMenuOpen]);
 
-  const handleToggleMenu = () => {
-    if (!mobileMenuOpen) {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => setIsProfileOpen(false);
+    if (isProfileOpen) {
+      window.addEventListener('click', handleClickOutside);
     }
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, [isProfileOpen]);
 
   const navLinks = [
     { name: "Home", path: "/", icon: HomeIcon },
@@ -59,17 +59,14 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           
-          {/* Logo & Stylish Brand Section */}
+          {/* Logo Section */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden">
-            <img 
-              src="https://lh3.googleusercontent.com/d/117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa"
-              alt="Internadda Logo" 
-              className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "https://via.placeholder.com/50?text=I";
-              }}
-            />
+              <img 
+                src="https://drive.google.com/thumbnail?id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa&sz=w400"
+                alt="Internadda Logo" 
+                className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-2xl font-black tracking-tighter leading-none text-slate-900 group-hover:text-indigo-600 transition-colors">
@@ -99,16 +96,42 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           {/* Right Actions */}
           <div className="hidden lg:flex items-center space-x-4">
             {user ? (
-              <div className="flex items-center space-x-4">
-                <Link to="/profile" className="flex items-center space-x-3 pl-4 border-l border-slate-200 group">
+              <div className="relative">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setIsProfileOpen(!isProfileOpen); }}
+                  className="flex items-center space-x-3 pl-4 border-l border-slate-200 group"
+                >
                   <div className="text-right">
                     <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600">{user.name}</p>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase">{user.role}</p>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase">{user.domain || 'Intern'}</p>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-indigo-50 border-2 border-indigo-100 flex items-center justify-center overflow-hidden group-hover:border-indigo-600 transition-colors">
                     <UserIcon className="w-5 h-5 text-indigo-600" />
                   </div>
-                </Link>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Profile Dropdown */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-[110] animate-in fade-in slide-in-from-top-2 duration-200">
+                    <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+                      <HomeIcon size={18} className="text-indigo-600" /> Dashboard
+                    </Link>
+                    <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+                      <UserIcon size={18} className="text-indigo-600" /> View Profile
+                    </Link>
+                    <Link to="/settings" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+                      <Settings size={18} className="text-indigo-600" /> Settings
+                    </Link>
+                    <div className="my-2 border-t border-slate-100"></div>
+                    <button
+                      onClick={() => { onLogout(); setIsProfileOpen(false); }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut size={18} /> Sign Out
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center space-x-2">
@@ -125,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           {/* Mobile Menu Toggle */}
           <button
             className="lg:hidden p-2.5 rounded-xl bg-slate-100 text-slate-600 hover:text-indigo-600 transition-colors"
-            onClick={handleToggleMenu}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -139,14 +162,11 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           onClick={() => setMobileMenuOpen(false)}
         />
         
-        <div 
-          className={`absolute right-0 top-0 h-full w-[300px] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className={`absolute right-0 top-0 h-full w-[300px] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="p-6 border-b flex items-center justify-between">
             <div className="flex flex-col">
               <span className="font-black text-slate-900 text-lg">INTERNADDA</span>
-              <span className="text-[9px] font-bold text-slate-400 tracking-tighter">INDIA'S ADDA FOR INTERNSHIPS</span>
+              <span className="text-[9px] font-bold text-slate-400 tracking-tighter uppercase">India's Adda for Internships</span>
             </div>
             <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-50 rounded-lg text-slate-400">
               <X className="w-5 h-5" />
