@@ -1,13 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Linkedin, Instagram, Youtube, Mail, MapPin, ChevronRight } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-  // Team members used for the team preview section
+  // Team members with provided image URLs
   const teamMembers = [
-    { name: 'Rahul Sharma', role: 'CEO & Founder', desc: 'Ex-Google, IIT Delhi' },
-    { name: 'Priya Patel', role: 'CTO', desc: 'Ex-Microsoft, BITS Pilani' }
+    { 
+      name: 'Lucky Tiwari', 
+      role: 'Founder & CEO', 
+      image: "https://iili.io/fbR5Kkx.png" 
+    },
+    { 
+      name: 'Vikash Yadav', 
+      role: 'Co-Founder & PR head', 
+      image: "https://iili.io/fbRADV1.png" 
+    }
+  ];
+
+  // Social Media Links with Actual Icons
+  const socials = [
+    { 
+      name: 'LinkedIn', 
+      icon: <Linkedin size={18} />, 
+      url: 'https://www.linkedin.com/company/internadda-india',
+      hoverClass: 'hover:bg-[#0077B5]' 
+    },
+    { 
+      name: 'Instagram', 
+      icon: <Instagram size={18} />, 
+      url: 'https://www.instagram.com/internadda.india',
+      hoverClass: 'hover:bg-[#E4405F]' 
+    },
+    { 
+      name: 'YouTube', 
+      icon: <Youtube size={18} />, 
+      url: 'https://www.youtube.com/@theinternadda',
+      hoverClass: 'hover:bg-[#FF0000]' 
+    }
   ];
 
   return (
@@ -15,7 +46,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           
-          {/* Brand Info - Centered on Mobile */}
+          {/* Brand Info */}
           <div className="lg:col-span-2 space-y-6 text-center md:text-left flex flex-col items-center md:items-start">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center overflow-hidden shadow-lg">
@@ -23,9 +54,6 @@ const Footer: React.FC = () => {
                   src="https://drive.google.com/thumbnail?id=117kBU2vFBqEXbrf2q7Kua8R7BSbUNCsa&sz=w200"
                   alt="Internadda"
                   className="w-10 h-10 object-contain"
-                  onError={(e) => {
-                    e.currentTarget.outerHTML = `<span class="text-white font-bold text-lg">IA</span>`;
-                  }}
                 />
               </div>
               <div className="text-left">
@@ -50,9 +78,8 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Links Section - Proper 2-column grid on mobile */}
+          {/* Links Section */}
           <div className="grid grid-cols-2 gap-8 lg:col-span-2">
-            {/* Platform Column */}
             <div className="text-center md:text-left">
               <h3 className="text-white font-semibold text-lg mb-6">Platform</h3>
               <ul className="space-y-4">
@@ -63,7 +90,6 @@ const Footer: React.FC = () => {
               </ul>
             </div>
 
-            {/* Resources Column */}
             <div className="text-center md:text-left">
               <h3 className="text-white font-semibold text-lg mb-6">Resources</h3>
               <ul className="space-y-4">
@@ -75,15 +101,17 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Team Preview Section - Hidden on very small screens, shown on desktop */}
+          {/* Leadership Section */}
           <div className="hidden lg:block">
             <h3 className="text-white font-semibold text-lg mb-6 text-center lg:text-left">Our Leadership</h3>
             <div className="space-y-4">
               {teamMembers.map((member, idx) => (
                 <div key={idx} className="flex items-center gap-3 p-3 bg-slate-800/40 rounded-xl border border-slate-800">
-                  <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-bold text-white">
-                    {member.name.split(' ').map(n => n[0]).join('')}
-                  </div>
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-10 h-10 rounded-full object-cover border border-slate-700 bg-slate-800"
+                  />
                   <div>
                     <div className="text-xs font-bold text-white">{member.name}</div>
                     <div className="text-[10px] text-slate-400">{member.role}</div>
@@ -91,10 +119,7 @@ const Footer: React.FC = () => {
                 </div>
               ))}
               <Link to="/team" className="text-indigo-400 hover:text-indigo-300 text-xs font-bold flex items-center gap-1 mt-2">
-                Meet the full team 
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                Meet the full team <ChevronRight size={14} />
               </Link>
             </div>
           </div>
@@ -105,34 +130,41 @@ const Footer: React.FC = () => {
           {/* Contact Details */}
           <div className="text-center md:text-left space-y-3">
             <h4 className="text-white font-bold text-sm mb-4">Contact Support</h4>
-            <a href="mailto:hello@internadda.com" className="flex items-center justify-center md:justify-start gap-2 text-sm text-slate-400 hover:text-white">
-              <span>✉️</span> hello@internadda.com
+            <a href="mailto:support@internadda.com" className="flex items-center justify-center md:justify-start gap-2 text-sm text-slate-400 hover:text-white transition-colors">
+              <Mail size={16} className="text-indigo-400" /> support@internadda.com
             </a>
             <p className="flex items-center justify-center md:justify-start gap-2 text-sm text-slate-400">
-              <span>📍</span> Mumbai, Maharashtra, India
+              <MapPin size={16} className="text-indigo-400" /> Delhi, India
             </p>
           </div>
 
-          {/* Social Icons */}
+          {/* Actual Social Logos */}
           <div className="flex flex-col items-center justify-center">
             <h4 className="text-white font-bold text-sm mb-4">Follow Our Journey</h4>
             <div className="flex gap-4">
-              {['💼', '📸', '🐦', '▶️'].map((icon, idx) => (
-                <a key={idx} href="#" className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:-translate-y-1 transition-all text-sm">
-                  {icon}
+              {socials.map((social, idx) => (
+                <a 
+                  key={idx} 
+                  href={social.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={`w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-white transition-all duration-300 hover:-translate-y-1 shadow-lg ${social.hoverClass}`}
+                  title={social.name}
+                >
+                  {social.icon}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Mini Newsletter */}
+          {/* Newsletter */}
           <div className="flex flex-col items-center md:items-end">
             <h4 className="text-white font-bold text-sm mb-4">Career Updates</h4>
             <div className="flex w-full max-w-xs">
               <input 
                 type="email" 
                 placeholder="Email address"
-                className="bg-slate-800 border-none rounded-l-lg px-4 py-2 text-xs w-full focus:ring-1 focus:ring-indigo-500"
+                className="bg-slate-800 border-none rounded-l-lg px-4 py-2 text-xs w-full focus:ring-1 focus:ring-indigo-500 text-white"
               />
               <button className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-r-lg text-white text-xs font-bold transition-colors">
                 Join
@@ -141,21 +173,10 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Legal Bottom Bar */}
+        {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-center">
           <p className="text-[11px] text-slate-500">
             © {currentYear} Internadda Platform. All rights reserved. 
-            <span className="hidden md:inline ml-2">| UDYAM-MH-08-1234567</span>
+            <span className="hidden md:inline ml-2">| UDYAM-MH-08-009XXXX</span>
           </p>
-          <div className="flex gap-6 text-[11px] text-slate-500">
-            <Link to="/terms" className="hover:text-white">Terms</Link>
-            <Link to="/privacy" className="hover:text-white">Privacy</Link>
-            <Link to="/refund" className="hover:text-white">Refunds</Link>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
-export default Footer;
+          <div className="flex gap-6 text-[11px] text-
