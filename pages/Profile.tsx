@@ -14,6 +14,27 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
     profileCompletion: 85
   });
 
+  const [profileStrength, setProfileStrength] = useState(0);
+
+  useEffect(() => {
+    // Calculate profile strength based on filled fields
+    let strength = 0;
+    if (user.name) strength += 20;
+    if (user.email) strength += 20;
+    if (user.phone) strength += 20;
+    if (user.education) strength += 20;
+    if (user.domain) strength += 10;
+    if (user.skills && user.skills.length > 0) strength += 10;
+    
+    setProfileStrength(Math.min(strength, 100));
+    
+    // Load stats from localStorage
+    const savedStats = localStorage.getItem('userStats');
+    if (savedStats) {
+      setStats(JSON.parse(savedStats));
+    }
+  }, [user]);
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -41,143 +62,283 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
     return motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
   };
 
+  const getSkillLevel = (skill: string) => {
+    // Simple algorithm to assign skill levels
+    const levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+    const hash = skill.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return levels[hash % 4];
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-2">Your Profile</h1>
-          <p className="text-slate-600">Simple. Clean. Ready for opportunities.</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-2">Your Profile Dashboard</h1>
+          <p className="text-slate-600">Track your progress and showcase your skills</p>
         </div>
 
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-8">
-          <div className="p-8">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              {/* Avatar */}
-              <div className="relative">
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
-                  <img 
-                    src="https://iili.io/fb5Wtrx.md.png" 
-                    alt="Explorer"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const parent = e.currentTarget.parentElement;
-                      if (parent) {
-                        parent.innerHTML = `
-                          <div class="w-full h-full flex items-center justify-center">
-                            <span class="text-indigo-600 font-bold text-2xl">
-                              ${getInitials(user.name)}
-                            </span>
-                          </div>
-                        `;
-                      }
-                    }}
-                  />
+        {/* Profile Strength Indicator */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-slate-900">Profile Strength</h3>
+            <span className="text-lg font-bold text-indigo-600">{profileStrength}%</span>
+          </div>
+          <div className="w-full bg-slate-100 rounded-full h-2.5">
+            <div 
+              className="bg-gradient-to-r from-emerald-400 to-green-500 h-2.5 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: `${profileStrength}%` }}
+            ></div>
+          </div>
+          <p className="text-sm text-slate-500 mt-2">
+            Complete your profile to increase your chances by {100 - profileStrength}%
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Profile Card */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <div className="p-8">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                  {/* Avatar */}
+                  <div className="relative">
+                    <div className="w-40 h-40 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center overflow-hidden border-8 border-white shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                      <img 
+                        src="https://iili.io/fb5Wtrx.md.png" 
+                        alt="Explorer"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const parent = e.currentTarget.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="w-full h-full flex items-center justify-center">
+                                <span class="text-indigo-600 font-bold text-3xl">
+                                  ${getInitials(user.name)}
+                                </span>
+                              </div>
+                            `;
+                          }
+                        }}
+                      />
+                    </div>
+                    {profileStrength === 100 && (
+                      <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                        ✓ Complete
+                      </div>
+                    )}
+                  </div>
+
+                  {/* User Info */}
+                  <div className="flex-1 text-center md:text-left">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-3">{user.name}</h2>
+                    <p className="text-slate-600 mb-2 flex items-center gap-2 justify-center md:justify-start">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                      </svg>
+                      {user.email}
+                    </p>
+                    <p className="text-slate-600 mb-4 flex items-center gap-2 justify-center md:justify-start">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                      </svg>
+                      {user.phone}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6">
+                      <span className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium border border-indigo-100 hover:bg-indigo-100 transition-colors">
+                        🎓 {user.education}
+                      </span>
+                      <span className="px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium border border-purple-100 hover:bg-purple-100 transition-colors">
+                        💼 {user.domain}
+                      </span>
+                      <span className="px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium border border-emerald-100 hover:bg-emerald-100 transition-colors">
+                        ⭐ {profileStrength}% Complete
+                      </span>
+                    </div>
+
+                    {/* Skills Section */}
+                    {user.skills && user.skills.length > 0 && (
+                      <div className="mb-8">
+                        <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                          </svg>
+                          Your Skills
+                        </h4>
+                        <div className="flex flex-wrap gap-3">
+                          {user.skills.map((skill, index) => (
+                            <div
+                              key={index}
+                              className="group relative px-4 py-2.5 bg-gradient-to-r from-slate-50 to-white rounded-lg border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300"
+                            >
+                              <span className="font-medium text-slate-800">{skill}</span>
+                              <span className="text-xs text-slate-500 ml-2 bg-slate-100 px-2 py-1 rounded">
+                                {getSkillLevel(skill)}
+                              </span>
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-slate-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                Skill Level: {getSkillLevel(skill)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-4 mb-8">
+                      <div className="text-center p-5 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-all duration-300">
+                        <div className="text-3xl font-bold text-indigo-600">{stats.testsCompleted}</div>
+                        <div className="text-sm text-slate-600">Tests Taken</div>
+                      </div>
+                      <div className="text-center p-5 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-all duration-300">
+                        <div className="text-3xl font-bold text-emerald-600">{stats.applicationsSubmitted}</div>
+                        <div className="text-sm text-slate-600">Applications</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              {/* User Info */}
-              <div className="flex-1 text-center md:text-left">
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">{user.name}</h2>
-                <p className="text-slate-600 mb-4">{user.email}</p>
+            {/* Motivational Section */}
+            <div className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white hover:shadow-xl transition-all duration-300">
+              <div className="text-center">
+                <div className="text-5xl mb-6 animate-bounce">🚀</div>
+                <h3 className="text-2xl font-bold mb-4">Ready for Your Next Adventure?</h3>
+                <p className="text-lg text-indigo-100 mb-8">
+                  {getRandomMessage()}
+                </p>
+                <Link 
+                  to="/internships"
+                  className="inline-flex items-center gap-3 bg-white text-indigo-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  <span>Explore Opportunities</span>
+                  <span className="text-xl">→</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Actions & Trust Indicators */}
+          <div className="space-y-6">
+            {/* Quick Actions */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-semibold text-slate-900 mb-6 text-lg">Quick Actions</h3>
+              <div className="space-y-4">
+                <Link 
+                  to="/settings"
+                  className="flex items-center gap-3 p-4 bg-indigo-50 text-indigo-700 rounded-xl hover:bg-indigo-100 hover:shadow-md transition-all duration-300 group"
+                >
+                  <div className="p-2 bg-indigo-100 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                    ✏️
+                  </div>
+                  <span className="font-medium">Edit Profile</span>
+                </Link>
                 
-                <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6">
-                  <span className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">
-                    {user.education}
-                  </span>
-                  <span className="px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
-                    {user.domain}
-                  </span>
-                </div>
-
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="text-center p-4 bg-slate-50 rounded-xl">
-                    <div className="text-2xl font-bold text-slate-900">{stats.testsCompleted}</div>
-                    <div className="text-sm text-slate-600">Tests Taken</div>
+                <Link 
+                  to="/internships"
+                  className="flex items-center gap-3 p-4 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 hover:shadow-md transition-all duration-300 group"
+                >
+                  <div className="p-2 bg-emerald-100 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                    💼
                   </div>
-                  <div className="text-center p-4 bg-slate-50 rounded-xl">
-                    <div className="text-2xl font-bold text-slate-900">{stats.applicationsSubmitted}</div>
-                    <div className="text-sm text-slate-600">Applications</div>
+                  <span className="font-medium">Browse Internships</span>
+                </Link>
+                
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 p-4 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 hover:shadow-md transition-all duration-300 group"
+                >
+                  <div className="p-2 bg-red-100 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                    🔒
+                  </div>
+                  <span className="font-medium">Log Out</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl text-white p-6">
+              <h3 className="font-semibold mb-6 text-lg flex items-center gap-2">
+                <span className="text-yellow-400">⭐</span>
+                Why Internadda?
+              </h3>
+              <div className="space-y-5">
+                <div className="flex items-start gap-3">
+                  <div className="text-2xl">✓</div>
+                  <div>
+                    <div className="font-medium">98% Success Rate</div>
+                    <div className="text-sm text-slate-300">Students placed through Internadda</div>
                   </div>
                 </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                  <Link 
-                    to="/internships"
-                    className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
-                  >
-                    🚀 Apply for Internships
-                  </Link>
-                  <Link 
-                    to="/settings"
-                    className="border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-semibold hover:bg-slate-50 transition-all"
-                  >
-                    ✏️ Edit Profile
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="border border-red-300 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-all"
-                  >
-                    🔒 Log Out
-                  </button>
+                
+                <div className="flex items-start gap-3">
+                  <div className="text-2xl">⚡</div>
+                  <div>
+                    <div className="font-medium">48h Avg. Process</div>
+                    <div className="text-sm text-slate-300">From application to interview</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="text-2xl">💰</div>
+                  <div>
+                    <div className="font-medium">₹6.5k Avg. Stipend</div>
+                    <div className="text-sm text-slate-300">Per month across all roles</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="text-2xl">🏆</div>
+                  <div>
+                    <div className="font-medium">500+ Companies</div>
+                    <div className="text-sm text-slate-300">Trusted partners worldwide</div>
+                  </div>
                 </div>
               </div>
+            </div>
+
+            {/* Profile Tips */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-semibold text-slate-900 mb-4 text-lg">Profile Tips</h3>
+              <ul className="space-y-3">
+                {profileStrength < 100 && (
+                  <li className="flex items-center gap-2 text-sm text-slate-600">
+                    <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
+                    Complete your profile for better matches
+                  </li>
+                )}
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                  Add more skills to stand out
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  Update your profile regularly
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  Apply within 24 hours of posting
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Motivational Section */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white mb-8">
-          <div className="text-center">
-            <div className="text-4xl mb-4">💫</div>
-            <h3 className="text-2xl font-bold mb-4">Ready for Your Next Adventure?</h3>
-            <p className="text-lg text-indigo-100 mb-6">
-              {getRandomMessage()}
-            </p>
-            <Link 
-              to="/internships"
-              className="inline-flex items-center gap-2 bg-white text-indigo-600 px-8 py-3.5 rounded-xl font-bold text-lg hover:shadow-xl transition-all"
-            >
-              Explore Opportunities →
-            </Link>
-          </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl border border-slate-200 text-center">
-            <div className="text-2xl font-bold text-slate-900 mb-2">98%</div>
-            <div className="text-sm text-slate-600">Success Rate</div>
-            <div className="text-xs text-slate-400 mt-2">Students placed through Internadda</div>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-slate-200 text-center">
-            <div className="text-2xl font-bold text-slate-900 mb-2">48h</div>
-            <div className="text-sm text-slate-600">Avg. Process Time</div>
-            <div className="text-xs text-slate-400 mt-2">From application to interview</div>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-slate-200 text-center">
-            <div className="text-2xl font-bold text-slate-900 mb-2">₹6.5k</div>
-            <div className="text-sm text-slate-600">Avg. Stipend</div>
-            <div className="text-xs text-slate-400 mt-2">Per month across all roles</div>
-          </div>
-        </div>
-
-        {/* Simple CTA */}
-        <div className="text-center mt-12">
-          <p className="text-slate-600 mb-6">
+        {/* CTA Section */}
+        <div className="mt-12 text-center">
+          <p className="text-slate-600 mb-8 text-lg">
             Start your journey today. It only takes one application to change everything.
           </p>
           <Link 
             to="/internships"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:scale-105 transition-all"
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
           >
-            💼 Browse Open Internships
+            <span>💼 Browse Open Internships</span>
+            <span className="text-2xl animate-pulse">→</span>
           </Link>
         </div>
       </div>
