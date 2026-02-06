@@ -1,8 +1,6 @@
 // utils/cashfree.ts
-import { loadEnv } from './env';
 
-const env = loadEnv();
-
+// Fixed: Removed manual './env' import to resolve build error
 export interface PaymentResponse {
   order_id: string;
   payment_session_id: string;
@@ -22,10 +20,11 @@ class CashfreePayment {
   private config: CashfreeConfig;
   
   constructor() {
+    // Fixed: Using Vite's standard way to access environment variables
     this.config = {
-      clientId: env.VITE_CASHFREE_CLIENT_ID,
-      clientSecret: env.VITE_CASHFREE_CLIENT_SECRET,
-      apiEndpoint: env.VITE_CASHFREE_MODE === 'PRODUCTION' 
+      clientId: import.meta.env.VITE_CASHFREE_CLIENT_ID || '',
+      clientSecret: import.meta.env.VITE_CASHFREE_CLIENT_SECRET || '',
+      apiEndpoint: import.meta.env.VITE_CASHFREE_MODE === 'PRODUCTION' 
         ? 'https://api.cashfree.com/pg' 
         : 'https://sandbox.cashfree.com/pg'
     };
@@ -62,7 +61,8 @@ class CashfreePayment {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create payment order');
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to create payment order');
     }
 
     return response.json();
