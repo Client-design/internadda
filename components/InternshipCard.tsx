@@ -7,25 +7,32 @@ interface InternshipCardProps {
 }
 
 const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
-  // 1. Apne 3 Card Image links yahan paste karein
+  // 1. Apne 3 Card Image links
   const CARD_IMAGES = [
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=500&auto=format&fit=crop", // Image for Index 1
-    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=500&auto=format&fit=crop", // Image for Index 2
-    "https://iili.io/fbArEUF.png"  // Image for Index 3
+    "https://iili.io/fbAQLjn.md.png", // Image for Index 1
+    "https://iili.io/fbArEUF.png",    // Image for Index 2
+    "https://iili.io/fbAQsTX.md.png"  // Image for Index 3
   ];
 
-  // 2. Apne 3 Company Logo links yahan paste karein
+  // 2. Apne 3 Company Logo links
   const COMPANY_LOGOS = [
     "https://iili.io/fbAXw2p.md.png", // Logo for Index 1
-    "https://iili.io/fbAXcYB.png", // Logo for Index 2
-    "https://iili.io/fbAXcYB.png"  // Logo for Index 3
+    "https://iili.io/fbAXcYB.png",    // Logo for Index 2
+    "https://iili.io/fbAXcYB.png"     // Logo for Index 3
   ];
 
-  // Sequence logic: ID ke basis par image aur logo pick karna
-  // -1 isliye kiya hai kyunki array 0 se start hota hai
-  const itemIndex = (Number(internship.id) - 1) % CARD_IMAGES.length;
+  // 3. Stipend Sequence
+  const STIPENDS = [
+    "₹2,000 - ₹8,000", // For ID 1
+    "₹2,500 - ₹5,000", // For ID 2
+    "₹3,000 - ₹7,000"  // For ID 3
+  ];
+
+  // Sequence logic: ID ke basis par resources pick karna
+  const itemIndex = (Number(internship.id) - 1) % 3;
   const selectedImage = CARD_IMAGES[itemIndex];
   const selectedLogo = COMPANY_LOGOS[itemIndex];
+  const selectedStipend = STIPENDS[itemIndex];
 
   // Applications count state (130-150 range)
   const [applications, setApplications] = useState(
@@ -49,14 +56,14 @@ const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
   return (
     <div className="group relative bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full flex flex-col">
       
-      {/* Applications Badge - Updates every 2 mins */}
+      {/* Applications Badge */}
       <div className="absolute top-3 right-3 z-10">
         <div className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-md">
           🔥 {applications} Applied
         </div>
       </div>
 
-      {/* Image Container - Picked by Sequence */}
+      {/* Image Container */}
       <div className="relative h-40 overflow-hidden">
         <img 
           src={selectedImage} 
@@ -68,7 +75,7 @@ const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        {/* Company Logo - Picked by Sequence */}
+        {/* Company Logo and Name */}
         <div className="flex items-center gap-3 mb-4">
           <img 
             src={selectedLogo} 
@@ -89,7 +96,7 @@ const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
         <div className="flex items-center gap-4 mb-5 pb-5 border-b border-slate-50">
           <div>
             <div className="text-[10px] text-slate-400 font-bold uppercase">Stipend</div>
-            <div className="text-xs font-bold text-indigo-600">{internship.stipend}</div>
+            <div className="text-xs font-bold text-indigo-600">{selectedStipend}</div>
           </div>
           <div className="w-px h-6 bg-slate-100"></div>
           <div>
