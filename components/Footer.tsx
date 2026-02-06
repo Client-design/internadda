@@ -173,10 +173,21 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+{/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-center">
           <p className="text-[11px] text-slate-500">
             © {currentYear} Internadda Platform. All rights reserved. 
-            <span className="hidden md:inline ml-2">| UDYAM-MH-08-009XXXX</span>
+            <span className="hidden md:inline ml-2">| UDYAM-MH-08-XXXXXX</span>
           </p>
-          <div className="flex gap-6 text-[11px] text-
+          <div className="flex gap-6 text-[11px] text-slate-500">
+            <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link to="/refund" className="hover:text-white transition-colors">Refunds</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
