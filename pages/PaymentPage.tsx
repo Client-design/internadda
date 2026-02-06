@@ -1,4 +1,3 @@
-import { cashfree } from '../utils/cashfree';
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MOCK_INTERNSHIPS } from '../constants';
@@ -12,26 +11,12 @@ const PaymentPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-const handlePayment = () => {
-  setIsProcessing(true);
-  
-  // Directly redirect to your specific Cashfree Payment Form link
-  window.location.href = "https://payments.cashfree.com/forms/internadda";
-};
-
-    // 3. Redirect user to the Live Cashfree Payment Page
-    if (orderData && orderData.payment_link) {
-      window.location.href = orderData.payment_link;
-    } else {
-      throw new Error(orderData.message || "Failed to generate payment link");
-    }
-  } catch (error) {
-    console.error("Payment Error:", error);
-    alert("Payment setup failed. Please check your API keys in Vercel settings.");
-  } finally {
-    setIsProcessing(false);
-  }
-};
+  const handlePayment = () => {
+    setIsProcessing(true);
+    // Directly redirect to your specific Cashfree Payment Form link
+    // This bypasses CORS and API key issues by using Cashfree's hosted checkout
+    window.location.href = "https://payments.cashfree.com/forms/internadda";
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -115,7 +100,7 @@ const handlePayment = () => {
                     </div>
                   </div>
 
-                  {/* Payment Methods */}
+                  {/* Payment Methods Selection */}
                   <div className="mb-8">
                     <h3 className="font-bold text-slate-900 mb-4">Select Payment Method</h3>
                     <div className="grid grid-cols-2 gap-4">
@@ -146,36 +131,6 @@ const handlePayment = () => {
                     </div>
                   </div>
 
-                  {/* UPI Details */}
-                  {paymentMethod === 'upi' && (
-                    <div className="mb-8">
-                      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
-                        <h4 className="font-bold text-slate-900 mb-4">UPI Payment</h4>
-                        <div className="space-y-4">
-                          <div className="text-center p-4 bg-white rounded-lg border border-slate-200">
-                            <div className="text-sm text-slate-500 mb-2">Scan QR Code</div>
-                            <div className="w-48 h-48 mx-auto bg-slate-100 rounded-lg flex items-center justify-center mb-4">
-                              <div className="text-center">
-                                <div className="text-4xl mb-2">📱</div>
-                                <div className="text-sm text-slate-500">QR Code</div>
-                              </div>
-                            </div>
-                            <div className="text-sm text-slate-600">
-                              Scan with any UPI app to pay ₹199
-                            </div>
-                          </div>
-                          
-                          <div className="text-center">
-                            <div className="text-sm text-slate-500 mb-2">Or Enter UPI ID</div>
-                            <div className="font-mono text-lg font-bold text-slate-900">
-                              internadda@axisbank
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
                   {/* Payment Button */}
                   <button
                     onClick={handlePayment}
@@ -185,7 +140,7 @@ const handlePayment = () => {
                     {isProcessing ? (
                       <div className="flex items-center justify-center gap-3">
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Processing Payment...
+                        Redirecting to Secure Payment...
                       </div>
                     ) : (
                       'Pay ₹199 & Start Assessment'
@@ -196,7 +151,6 @@ const handlePayment = () => {
 
               {/* Benefits Sidebar */}
               <div className="space-y-6">
-                {/* Internship Card */}
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6">
                   <h3 className="font-bold text-slate-900 mb-4">You're Applying For</h3>
                   <div className="space-y-3">
@@ -222,7 +176,6 @@ const handlePayment = () => {
                   </div>
                 </div>
 
-                {/* Benefits */}
                 <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 p-6">
                   <h3 className="font-bold text-slate-900 mb-4">What You Get</h3>
                   <ul className="space-y-3">
@@ -238,46 +191,7 @@ const handlePayment = () => {
                       </div>
                       <span className="text-slate-700">Professional certificate</span>
                     </li>
-                    <li className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center">
-                        <span className="text-indigo-600 text-sm">✓</span>
-                      </div>
-                      <span className="text-slate-700">LinkedIn recommendation</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center">
-                        <span className="text-indigo-600 text-sm">✓</span>
-                      </div>
-                      <span className="text-slate-700">100% money-back guarantee</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center">
-                        <span className="text-indigo-600 text-sm">✓</span>
-                      </div>
-                      <span className="text-slate-700">MSME certified platform</span>
-                    </li>
                   </ul>
-                </div>
-
-                {/* Need Help */}
-                <div className="bg-gradient-to-r from-slate-50 to-white rounded-2xl border border-slate-200 p-6">
-                  <h3 className="font-bold text-slate-900 mb-4">Need Help?</h3>
-                  <div className="space-y-3">
-                    <a href="tel:+9118001234567" className="flex items-center gap-3 text-slate-600 hover:text-indigo-600">
-                      <span className="text-xl">📞</span>
-                      <div>
-                        <div className="font-medium">+91 1800 123 4567</div>
-                        <div className="text-sm">24/7 Support</div>
-                      </div>
-                    </a>
-                    <a href="mailto:support@internadda.com" className="flex items-center gap-3 text-slate-600 hover:text-indigo-600">
-                      <span className="text-xl">✉️</span>
-                      <div>
-                        <div className="font-medium">support@internadda.com</div>
-                        <div className="text-sm">Email Support</div>
-                      </div>
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
