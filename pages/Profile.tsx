@@ -63,7 +63,6 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
   };
 
   const getSkillLevel = (skill: string) => {
-    // Simple algorithm to assign skill levels
     const levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
     const hash = skill.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return levels[hash % 4];
@@ -222,41 +221,40 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
             </div>
           </div>
 
-          {/* Right Column - Actions & Trust Indicators */}
+          {/* Right Column - Profile Tips & Trust Indicators */}
           <div className="space-y-6">
-            {/* Quick Actions */}
+            {/* Profile Tips (Replaced Quick Actions) */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-              <h3 className="font-semibold text-slate-900 mb-6 text-lg">Quick Actions</h3>
-              <div className="space-y-4">
-                <Link 
-                  to="/settings"
-                  className="flex items-center gap-3 p-4 bg-indigo-50 text-indigo-700 rounded-xl hover:bg-indigo-100 hover:shadow-md transition-all duration-300 group"
-                >
-                  <div className="p-2 bg-indigo-100 rounded-lg group-hover:scale-110 transition-transform duration-300">
-                    ✏️
-                  </div>
-                  <span className="font-medium">Edit Profile</span>
+              <h3 className="font-semibold text-slate-900 mb-4 text-lg">Profile Tips</h3>
+              <ul className="space-y-4">
+                {profileStrength < 100 && (
+                  <li className="flex items-start gap-3 text-sm text-slate-600">
+                    <div className="w-2 h-2 bg-amber-400 rounded-full mt-1.5 shrink-0"></div>
+                    <p>Complete your missing profile details to get better-matched internship recommendations.</p>
+                  </li>
+                )}
+                <li className="flex items-start gap-3 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full mt-1.5 shrink-0"></div>
+                  <p>Adding specific technical skills like React or Python increases recruiter visibility by 3x.</p>
+                </li>
+                <li className="flex items-start gap-3 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full mt-1.5 shrink-0"></div>
+                  <p>Keep your contact information updated to ensure you don't miss interview calls.</p>
+                </li>
+                <li className="flex items-start gap-3 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-1.5 shrink-0"></div>
+                  <p>Apply to internships within the first 24 hours of posting for a 50% higher response rate.</p>
+                </li>
+                <li className="flex items-start gap-3 text-sm text-slate-600">
+                  <div className="w-2 h-2 bg-indigo-400 rounded-full mt-1.5 shrink-0"></div>
+                  <p>Verify your skills by taking the internal Internadda assessments.</p>
+                </li>
+              </ul>
+              
+              <div className="mt-6 pt-6 border-t border-slate-100">
+                <Link to="/settings" className="text-indigo-600 text-sm font-bold hover:underline">
+                  Update Profile Now →
                 </Link>
-                
-                <Link 
-                  to="/internships"
-                  className="flex items-center gap-3 p-4 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 hover:shadow-md transition-all duration-300 group"
-                >
-                  <div className="p-2 bg-emerald-100 rounded-lg group-hover:scale-110 transition-transform duration-300">
-                    💼
-                  </div>
-                  <span className="font-medium">Browse Internships</span>
-                </Link>
-                
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-3 p-4 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 hover:shadow-md transition-all duration-300 group"
-                >
-                  <div className="p-2 bg-red-100 rounded-lg group-hover:scale-110 transition-transform duration-300">
-                    🔒
-                  </div>
-                  <span className="font-medium">Log Out</span>
-                </button>
               </div>
             </div>
 
@@ -299,31 +297,6 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Profile Tips */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-              <h3 className="font-semibold text-slate-900 mb-4 text-lg">Profile Tips</h3>
-              <ul className="space-y-3">
-                {profileStrength < 100 && (
-                  <li className="flex items-center gap-2 text-sm text-slate-600">
-                    <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                    Complete your profile for better matches
-                  </li>
-                )}
-                <li className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-                  Add more skills to stand out
-                </li>
-                <li className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  Update your profile regularly
-                </li>
-                <li className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  Apply within 24 hours of posting
-                </li>
-              </ul>
             </div>
           </div>
         </div>
