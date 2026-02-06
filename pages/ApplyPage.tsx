@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { internships } from '../constants';
-import { ShieldCheck, Clock, CheckCircle, Lock } from 'lucide-react';
+// Change 'internships' to 'MOCK_INTERNSHIPS' to fix the build error
+import { MOCK_INTERNSHIPS } from '../constants'; 
+import { ShieldCheck, Clock, CheckCircle, Lock, BadgeCheck } from 'lucide-react';
 
 const ApplyPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const internship = internships.find(i => i.id === id);
+  const internship = MOCK_INTERNSHIPS.find(i => i.id === id);
 
-  // Prefilling state from localStorage (assuming 'user' was saved during login)
+  // Prefilling state from user data (Assuming you store user info in localStorage)
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -18,20 +19,22 @@ const ApplyPage: React.FC = () => {
   });
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      const user = JSON.parse(savedUser);
+    // Get user details from localStorage to pre-fill the form
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
       setFormData(prev => ({
         ...prev,
-        fullName: user.name || '',
-        email: user.email || '',
+        fullName: userData.name || '',
+        email: userData.email || '',
+        phone: userData.phone || ''
       }));
     }
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic for submission
+    // Your submission logic here
     alert("Application submitted successfully!");
     navigate('/dashboard');
   };
@@ -42,104 +45,112 @@ const ApplyPage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Column: The Form */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Main Application Form */}
+        <div className="lg:col-span-2">
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Apply for {internship.title}</h2>
-            <p className="text-slate-500 mb-8">Confirm your details below to start your application.</p>
+            <div className="flex items-center gap-3 mb-6">
+               <div className="bg-indigo-100 p-2 rounded-lg">
+                 <BadgeCheck className="text-indigo-600" size={24} />
+               </div>
+               <div>
+                 <h2 className="text-2xl font-bold text-slate-900 leading-tight">Apply for {internship.title}</h2>
+                 <p className="text-slate-500 text-sm">Verified Internship • Free Application</p>
+               </div>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Full Name</label>
+                  <label className="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">Full Name</label>
                   <input 
                     type="text" 
                     value={formData.fullName}
+                    onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                     placeholder="John Doe"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Email Address</label>
+                  <label className="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">Email Address</label>
                   <input 
                     type="email" 
                     value={formData.email}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    readOnly // Keeping email read-only for trust/security if logged in
+                    className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed outline-none"
                     placeholder="john@example.com"
-                    required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">College/University</label>
+                <label className="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">College / University</label>
                 <input 
                   type="text" 
+                  value={formData.college}
+                  onChange={(e) => setFormData({...formData, college: e.target.value})}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                   placeholder="Enter your college name"
                   required
                 />
               </div>
 
-              <div className="p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer text-center">
+              <div className="p-8 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer text-center group">
                 <input type="file" className="hidden" id="resume-upload" />
                 <label htmlFor="resume-upload" className="cursor-pointer">
-                  <div className="text-slate-600 font-bold text-sm">Upload Resume (PDF)</div>
-                  <div className="text-slate-400 text-xs mt-1">Click to browse or drag and drop</div>
+                  <div className="text-slate-600 font-bold text-sm group-hover:text-indigo-600">Upload Your Resume</div>
+                  <div className="text-slate-400 text-xs mt-1">PDF format highly recommended</div>
                 </label>
               </div>
 
               <button 
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
+                className="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1"
               >
-                Submit Application <CheckCircle size={18} />
+                Submit Secure Application <CheckCircle size={18} />
               </button>
             </form>
           </div>
         </div>
 
-        {/* Right Column: Trust & Summary */}
+        {/* Side Trust & Summary Section */}
         <div className="space-y-6">
-          {/* Summary Card */}
-          <div className="bg-slate-900 text-white rounded-3xl p-6 shadow-xl">
-            <h4 className="text-xs font-bold text-indigo-400 uppercase mb-4">Application Summary</h4>
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+            <h4 className="text-xs font-bold text-slate-400 uppercase mb-6 tracking-widest">Application Summary</h4>
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                <Clock className="text-indigo-400" />
+              <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center">
+                <Clock className="text-indigo-600" size={20} />
               </div>
               <div>
-                <div className="text-sm font-bold">{internship.title}</div>
-                <div className="text-xs text-slate-400">{internship.company}</div>
+                <div className="text-sm font-bold text-slate-800">{internship.title}</div>
+                <div className="text-xs text-slate-500">{internship.company}</div>
               </div>
             </div>
-            <div className="space-y-3 border-t border-white/10 pt-4">
+            <div className="space-y-4 border-t border-slate-50 pt-6">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Duration</span>
-                <span className="font-bold">3 Months</span>
+                <span className="text-slate-400 font-medium">Stipend</span>
+                <span className="font-bold text-indigo-600">{internship.stipend}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Type</span>
-                <span className="font-bold">Remote/Virtual</span>
+                <span className="text-slate-400 font-medium">Location</span>
+                <span className="font-bold text-slate-700">{internship.location}</span>
               </div>
             </div>
           </div>
 
-          {/* Trust Signals */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-5">
+          <div className="bg-indigo-600 rounded-3xl p-6 text-white space-y-5 shadow-xl shadow-indigo-100">
             <div className="flex items-start gap-3">
-              <ShieldCheck className="text-green-500 mt-1" size={20} />
+              <ShieldCheck className="text-indigo-200 mt-1" size={20} />
               <div>
-                <p className="text-sm font-bold text-slate-800">Verified Partner</p>
-                <p className="text-xs text-slate-500">This internship is manually verified by InternAdda.</p>
+                <p className="text-sm font-bold">Verified by InternAdda</p>
+                <p className="text-xs text-indigo-100 opacity-80">This role has been manually reviewed for authenticity.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Lock className="text-indigo-500 mt-1" size={20} />
+              <Lock className="text-indigo-200 mt-1" size={20} />
               <div>
-                <p className="text-sm font-bold text-slate-800">Secure Application</p>
-                <p className="text-xs text-slate-500">Your personal data is encrypted and protected.</p>
+                <p className="text-sm font-bold">Secure Privacy</p>
+                <p className="text-xs text-indigo-100 opacity-80">Your profile is only visible to the hiring team.</p>
               </div>
             </div>
           </div>
