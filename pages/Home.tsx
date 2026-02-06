@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { 
   CheckCircle2, Users, Building2, ArrowRight, 
   ShieldCheck, Star, Award, Briefcase, Zap,
-  Globe, Clock, Search, FileCheck, Check
+  Globe, Clock, Search, FileCheck, Check,
+  LayoutGrid
 } from 'lucide-react';
 import InternshipCard from '../components/InternshipCard';
 import { MOCK_INTERNSHIPS, CATEGORIES } from '../constants';
@@ -213,6 +214,18 @@ const Home: React.FC = () => {
           {filteredInternships.map(internship => (
             <InternshipCard key={internship.id} internship={internship} />
           ))}
+        </div>
+
+        {/* View All Button */}
+        <div className="mt-12 flex justify-center">
+          <Link 
+            to="/internships" 
+            className="group flex items-center gap-2 px-8 py-3 bg-white border border-slate-200 text-slate-900 rounded-lg font-bold text-sm hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
+          >
+            <LayoutGrid size={16} className="text-indigo-600" />
+            View All Internships
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </section>
 
