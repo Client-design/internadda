@@ -11,20 +11,37 @@ const PaymentPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
+const handlePayment = async () => {
+  setIsProcessing(true);
+  try {
+    // 1. Get real internship data for the order
+    const amount = 199; 
     
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    // 2. Call your Vercel backend API
+    const orderData = await cashfree.createOrder(
+      `order_${Date.now()}`, // Unique Order ID
+      amount,
+      {
+        id: "USER_ID_HERE", // Replace with your actual logged-in User ID
+        email: "user@example.com", 
+        phone: "9999999999",
+        name: "Lucky Tiwari"
+      }
+    );
+
+    // 3. Redirect user to the Live Cashfree Payment Page
+    if (orderData && orderData.payment_link) {
+      window.location.href = orderData.payment_link;
+    } else {
+      throw new Error(orderData.message || "Failed to generate payment link");
+    }
+  } catch (error) {
+    console.error("Payment Error:", error);
+    alert("Payment setup failed. Please check your API keys in Vercel settings.");
+  } finally {
     setIsProcessing(false);
-    setPaymentSuccess(true);
-    
-    // Redirect to test after 3 seconds
-    setTimeout(() => {
-      navigate(`/test/real/${id}`);
-    }, 3000);
-  };
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
