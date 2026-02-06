@@ -237,14 +237,7 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
                   <div className="w-2 h-2 bg-emerald-400 rounded-full mt-1.5 shrink-0"></div>
                   <p>Adding specific technical skills like React or Python increases recruiter visibility by 3x.</p>
                 </li>
-                <li className="flex items-start gap-3 text-sm text-slate-600">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mt-1.5 shrink-0"></div>
-                  <p>Keep your contact information updated to ensure you don't miss interview calls.</p>
-                </li>
-                <li className="flex items-start gap-3 text-sm text-slate-600">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-1.5 shrink-0"></div>
-                  <p>Apply to internships within the first 24 hours of posting for a 50% higher response rate.</p>
-                </li>
+                
                 <li className="flex items-start gap-3 text-sm text-slate-600">
                   <div className="w-2 h-2 bg-indigo-400 rounded-full mt-1.5 shrink-0"></div>
                   <p>Verify your skills by taking the internal Internadda assessments.</p>
