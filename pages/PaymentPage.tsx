@@ -1,6 +1,4 @@
-// Add this import to the top of pages/PaymentPage.tsx
 import { cashfree } from '../utils/cashfree';
-
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MOCK_INTERNSHIPS } from '../constants';
