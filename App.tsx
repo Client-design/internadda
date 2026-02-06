@@ -133,7 +133,8 @@ const App: React.FC = () => {
             <Route path="/hiring-process" element={<HiringProcess />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/offer-letter" element={<OfferLetterPage />} />
-
+                // In App.tsx, update the test route
+            <Route path="/test/real/:id" element={user ? <SkillTestEngine /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
             
