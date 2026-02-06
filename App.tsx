@@ -147,6 +147,8 @@ const App: React.FC = () => {
             <Route path="/tests" element={user ? <Tests user={user} /> : <Navigate to="/login" />} />
             <Route path="/result/:id" element={user ? <ResultPage user={user} /> : <Navigate to="/login" />} />
 
+            <Route path="/interview-confirmation" element={<InterviewConfirmation />} />
+
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
