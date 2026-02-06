@@ -1,8 +1,8 @@
 import React from 'react';
 import { Internship, Question } from './types';
 
-// Renamed from MOCK_INTERNSHIPS to internships to fix build errors in ApplyPage
-export const internships: Internship[] = [
+// Humne naam 'MOCK_INTERNSHIPS' hi rakha hai taaki baki files mein error na aaye
+export const MOCK_INTERNSHIPS: Internship[] = [
   {
     id: '1',
     title: 'Python Developer Intern',
