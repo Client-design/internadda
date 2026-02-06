@@ -31,8 +31,8 @@ const InternshipCard: React.FC<InternshipCardProps> = ({ internship }) => {
   // 4. Company Name Sequence (Replacing generic "Corporate Partner")
   const COMPANY_NAMES = [
     "Arjuna-ai Solutions", // Name for Index 1
-    "Internadda Enterprise",      // Name for Index 2
-    "Internadda Enterprise"      // Name for Index 3
+    "Internadda Enterprises",      // Name for Index 2
+    "Internadda Enterprises"      // Name for Index 3
   ];
 
   // Sequence logic: ID ke basis par resources pick karna
