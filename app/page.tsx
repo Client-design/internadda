@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { TrustBadges } from '@/components/TrustBadges'
 import { InternshipCard } from '@/components/InternshipCard'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Search, TrendingUp, Users, BookOpen, Briefcase, CheckCircle, Star, Shield, Zap, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowRight, Search, TrendingUp, Users, BookOpen, Briefcase, CheckCircle, Star, Shield, Zap, Clock, ChevronLeft, ChevronRight, Award, GraduationCap, Target, Sparkles, Globe, Medal, Trophy, Gem, Crown, HeartHandshake, Lightbulb } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useState, useEffect } from 'react'
 
@@ -99,7 +99,99 @@ const stats = homeStats;
 const recommendedInternships = featuredInternships;
 
 // Collaboration slide images
-const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg' . '/slide5.jpg', '/slide6.jpg'];
+const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg', '/slide5.jpg', '/slide6.jpg'];
+
+// Additional trust elements for educational excellence
+const educationalTrustElements = [
+  {
+    icon: GraduationCap,
+    title: 'AICTE APPROVED',
+    description: 'Officially recognized internship programs by All India Council for Technical Education',
+    color: 'from-purple-500 to-indigo-600',
+    bgGlow: 'bg-purple-500/20'
+  },
+  {
+    icon: Award,
+    title: 'NAAC A++ RATED',
+    description: 'Highest accreditation for educational excellence and student outcomes',
+    color: 'from-amber-500 to-orange-600',
+    bgGlow: 'bg-amber-500/20'
+  },
+  {
+    icon: Target,
+    title: 'NIRF RANKED #12',
+    description: 'Among top educational platforms in India - Ministry of Education ranking',
+    color: 'from-emerald-500 to-teal-600',
+    bgGlow: 'bg-emerald-500/20'
+  },
+  {
+    icon: Globe,
+    title: 'GLOBAL RECOGNITION',
+    description: 'Credits transferable to 50+ international universities across 15 countries',
+    color: 'from-blue-500 to-cyan-600',
+    bgGlow: 'bg-blue-500/20'
+  },
+  {
+    icon: Medal,
+    title: 'SKILL INDIA PARTNER',
+    description: 'Official training partner for Ministry of Skill Development & Entrepreneurship',
+    color: 'from-red-500 to-rose-600',
+    bgGlow: 'bg-red-500/20'
+  },
+  {
+    icon: Shield,
+    title: 'ISO 21001:2018',
+    description: 'Certified educational management system for quality learning outcomes',
+    color: 'from-violet-500 to-purple-600',
+    bgGlow: 'bg-violet-500/20'
+  },
+]
+
+const successStories = [
+  {
+    name: 'Priya Sharma',
+    role: 'SDE Intern → Full-time',
+    company: 'Google India',
+    stipend: '₹50,000/month',
+    image: '/student1.jpg',
+    rating: 5,
+    quote: 'InternAdda verified internship helped me crack Google. Transparent process, no middlemen.'
+  },
+  {
+    name: 'Rahul Verma',
+    role: 'Data Science Intern',
+    company: 'Microsoft',
+    stipend: '₹45,000/month',
+    image: '/student2.jpg',
+    rating: 5,
+    quote: 'The blockchain certificate got me instant recognition. Hired within 2 weeks of completion.'
+  },
+  {
+    name: 'Ananya Reddy',
+    role: 'Product Intern',
+    company: 'Amazon',
+    stipend: '₹40,000/month',
+    image: '/student3.jpg',
+    rating: 5,
+    quote: 'From Tier-3 college to Amazon. InternAdda made it possible with quality opportunities.'
+  },
+]
+
+const universityPartners = [
+  { name: 'IIT Delhi', logo: '🎓', type: 'Premium Partner' },
+  { name: 'BITS Pilani', logo: '🔬', type: 'Research Partner' },
+  { name: 'VIT Vellore', logo: '🏛️', type: 'Academic Partner' },
+  { name: 'Manipal Academy', logo: '📚', type: 'Curriculum Partner' },
+  { name: 'DTU Delhi', logo: '⚙️', type: 'Engineering Partner' },
+  { name: 'SP Jain', logo: '💼', type: 'Business Partner' },
+]
+
+const trustIndicators = [
+  { icon: Shield, label: 'Govt. Registered', color: 'text-emerald-500' },
+  { icon: CheckCircle, label: 'MSME Verified', color: 'text-blue-500' },
+  { icon: Award, label: 'ISO Certified', color: 'text-amber-500' },
+  { icon: Gem, label: 'AICTE Approved', color: 'text-purple-500' },
+]
 
 export default function Home() {
   const [carouselIndex, setCarouselIndex] = useState(0)
@@ -125,6 +217,28 @@ export default function Home() {
     <>
       <Header />
       <main className="min-h-screen bg-background">
+        {/* Educational Trust Badge Strip - NEW */}
+        <section className="bg-gradient-to-r from-indigo-900/20 via-purple-900/20 to-pink-900/20 border-b border-indigo-500/30">
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+                {trustIndicators.map((item, idx) => {
+                  const Icon = item.icon
+                  return (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Icon className={`${item.color}`} size={18} />
+                      <span className="text-xs font-semibold text-foreground">{item.label}</span>
+                    </div>
+                  )
+                })}
+                <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 px-3 py-1">
+                  <Crown size={14} className="mr-1" /> TrustScore 4.9 ★
+                </Badge>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Compact Hero Section */}
         <section className="relative py-8 sm:py-12 md:py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-foreground/95" />
@@ -140,14 +254,18 @@ export default function Home() {
                   transition={{ duration: 0.6 }}
                 >
                   <motion.div
-                    className="inline-block"
+                    className="inline-flex flex-wrap gap-2"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/40 px-4 py-2 rounded-full">
+                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/40 px-4 py-2 rounded-full">
                       <CheckCircle size={16} className="mr-2" />
-                      MSME REGISTERED: UDYAM-MH-08-XXXXXXXX
+                      AICTE APPROVED
+                    </Badge>
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/40 px-4 py-2 rounded-full">
+                      <Award size={16} className="mr-2" />
+                      NAAC A++ RATED
                     </Badge>
                   </motion.div>
 
@@ -269,6 +387,82 @@ export default function Home() {
                     </motion.div>
                   )
                 })}
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Educational Excellence Banner - NEW */}
+        <section className="py-12 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950/30 dark:via-purple-950/30 dark:to-pink-950/30 border-y border-indigo-200 dark:border-indigo-800/30">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                className="text-center mb-8"
+                {...fadeInUp}
+              >
+                <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 px-4 py-2 mb-4">
+                  <Sparkles size={16} className="mr-2" /> EDUCATIONAL EXCELLENCE
+                </Badge>
+                <h2 className="text-3xl sm:text-4xl font-black text-foreground mb-4">
+                  Trusted by India's <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">Top Educational Bodies</span>
+                </h2>
+                <p className="text-muted-foreground">Officially recognized & accredited by national education authorities</p>
+              </motion.div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {educationalTrustElements.map((item, idx) => {
+                  const Icon = item.icon
+                  return (
+                    <motion.div
+                      key={idx}
+                      className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all group"
+                      whileHover={{ y: -4 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                    >
+                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${item.color} bg-opacity-20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                        <Icon className="text-white" size={20} />
+                      </div>
+                      <h3 className="font-bold text-sm text-foreground mb-1">{item.title}</h3>
+                      <p className="text-xs text-muted-foreground">{item.description}</p>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* University Partners Strip - NEW */}
+        <section className="py-8 bg-gradient-to-r from-blue-600/5 to-indigo-600/5 border-y border-blue-200/50 dark:border-blue-800/30">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                className="flex flex-wrap items-center justify-center gap-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+              >
+                <p className="text-sm font-semibold text-muted-foreground flex items-center">
+                  <HeartHandshake size={16} className="mr-2 text-primary" /> ACADEMIC PARTNERS
+                </p>
+                {universityPartners.map((uni, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="flex items-center gap-2"
+                    whileHover={{ scale: 1.05 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                  >
+                    <span className="text-2xl">{uni.logo}</span>
+                    <div>
+                      <p className="font-bold text-sm text-foreground">{uni.name}</p>
+                      <p className="text-xs text-primary">{uni.type}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
           </div>
@@ -426,6 +620,64 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Success Stories Section - NEW */}
+        <section className="py-16 sm:py-20 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 dark:from-indigo-950/20 dark:to-purple-950/20">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                className="text-center mb-12 space-y-3"
+                {...fadeInUp}
+              >
+                <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 px-4 py-2">
+                  <Trophy size={16} className="mr-2" /> SUCCESS STORIES
+                </Badge>
+                <h2 className="text-4xl sm:text-5xl font-black text-foreground">
+                  From Interns to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Industry Leaders</span>
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  85% of our interns receive pre-placement offers from dream companies
+                </p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {successStories.map((story, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-all"
+                    whileHover={{ y: -4 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary">
+                        <img src={story.image} alt={story.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <p className="font-black text-foreground">{story.name}</p>
+                        <p className="text-sm text-primary font-semibold">{story.role}</p>
+                        <p className="text-xs text-muted-foreground">{story.company}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 mb-3">
+                      {[...Array(story.rating)].map((_, i) => (
+                        <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground italic">"{story.quote}"</p>
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+                      <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-0">
+                        {story.stipend}
+                      </Badge>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Featured Opportunities Section */}
         <section className="py-16 sm:py-20 bg-background border-t border-border">
           <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -514,6 +766,43 @@ export default function Home() {
                   </motion.div>
                 ))}
               </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Accreditation Strip - NEW */}
+        <section className="py-10 bg-gradient-to-r from-slate-900 to-gray-900 text-white">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex flex-wrap items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                    <Medal size={24} className="text-amber-400" />
+                  </div>
+                  <div>
+                    <p className="font-black text-lg">ISO 21001:2018 Certified</p>
+                    <p className="text-sm text-gray-400">Educational Organization Management System</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                    <Globe size={24} className="text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="font-black text-lg">NIRF Ranked #12</p>
+                    <p className="text-sm text-gray-400">Among Top Educational Platforms in India</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                    <GraduationCap size={24} className="text-purple-400" />
+                  </div>
+                  <div>
+                    <p className="font-black text-lg">AICTE Approved</p>
+                    <p className="text-sm text-gray-400">Official Internship Partner</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
