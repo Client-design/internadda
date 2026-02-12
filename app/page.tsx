@@ -7,8 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { TrustBadges } from '@/components/TrustBadges'
 import { InternshipCard } from '@/components/InternshipCard'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Search, TrendingUp, Users, BookOpen, Briefcase, CheckCircle, Star, Shield, Zap, Clock, ChevronLeft, ChevronRight, Award, GraduationCap, Target, Sparkles, Globe, Medal, Trophy, Gem, Crown, HeartHandshake, Lightbulb } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { ArrowRight, TrendingUp, Users, Briefcase, CheckCircle, Star, Shield, Clock, ChevronLeft, ChevronRight, GraduationCap, Award, BookOpen, MapPin, Calendar, IndianRupee } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 const fadeInUp = {
@@ -21,11 +20,11 @@ const fadeInUp = {
 const staggerContainer = {
   initial: { opacity: 0 },
   whileInView: { opacity: 1 },
-  transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  transition: { staggerChildren: 0.1 },
   viewport: { once: true },
 }
 
-// Featured internship data
+// Featured internship data with proper images
 const featuredInternships = [
   {
     id: '1',
@@ -37,6 +36,7 @@ const featuredInternships = [
     skills: ['Python', 'Django', 'PostgreSQL'],
     applicants: 131,
     isRecommended: true,
+    image: '/internship1.jpg'
   },
   {
     id: '2',
@@ -48,6 +48,7 @@ const featuredInternships = [
     skills: ['React', 'Next.js', 'Tailwind'],
     applicants: 150,
     isRecommended: true,
+    image: '/internship2.jpg'
   },
   {
     id: '3',
@@ -59,145 +60,62 @@ const featuredInternships = [
     skills: ['Python', 'Pandas', 'Matplotlib'],
     applicants: 130,
     isRecommended: true,
+    image: '/internship3.jpg'
   },
 ]
 
-const qualityMetrics = [
+const trustMetrics = [
   {
-    icon: '✓',
-    title: 'MANUAL EMPLOYER AUDIT',
-    description: 'Every company is verified through MCA/MSME records before listing.'
+    icon: Shield,
+    title: '100% VERIFIED',
+    value: '500+ Companies',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50'
   },
   {
-    icon: '⚡',
-    title: 'DIRECT INTERVIEW ROUTING',
-    description: 'Our platform routes your assessment directly to the decision maker.'
-  },
-  {
-    icon: '🔐',
-    title: 'CERTIFICATE LEDGER',
-    description: 'Blockchain-ready certificates recognized by 150+ companies globally.'
-  },
-]
-
-const globalPartners = [
-  { name: 'Tracxn', title: 'Leading Startup Data Platform', quote: '"InternAdda has built a transparent ecosystem that significantly reduces hiring friction for early-stage startups."', logo: '📊' },
-  { name: 'YourStory', title: 'Indian Startup Media Platform', quote: '"One of the most trusted internship platforms in India. Transparent and student-focused."', logo: '📰' },
-  { name: 'NASSCOM', title: 'National IT Industry Association', quote: '"Bridging the gap between students and industry with quality internships."', logo: '🏢' },
-  { name: 'TechCrunch India', title: 'Tech Innovation News', quote: '"InternAdda is revolutionizing how students find their first real opportunity."', logo: '⚡' },
-]
-
-const homeStats = [
-  { value: '300+', label: 'ACTIVE ROLES', icon: Briefcase },
-  { value: '150+', label: 'CORPORATE PARTNERS', icon: Users },
-  { value: '₹6,500', label: 'AVG. SPEND', icon: TrendingUp },
-  { value: '48 Hours', label: 'HIRING TIME', icon: Clock },
-]
-
-const skills = ['Python', 'React', 'Django', 'PostgreSQL', 'Tailwind', 'Pandas', 'Matplotlib'];
-const stats = homeStats;
-const recommendedInternships = featuredInternships;
-
-// Collaboration slide images
-const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg', '/slide5.jpg', '/slide6.jpg'];
-
-// Additional trust elements for educational excellence
-const educationalTrustElements = [
-  {
-    icon: GraduationCap,
-    title: 'AICTE APPROVED',
-    description: 'Officially recognized internship programs by All India Council for Technical Education',
-    color: 'from-purple-500 to-indigo-600',
-    bgGlow: 'bg-purple-500/20'
+    icon: Users,
+    title: 'ACTIVE STUDENTS',
+    value: '7,200+',
+    color: 'text-blue-600',
+    bg: 'bg-blue-50'
   },
   {
     icon: Award,
-    title: 'NAAC A++ RATED',
-    description: 'Highest accreditation for educational excellence and student outcomes',
-    color: 'from-amber-500 to-orange-600',
-    bgGlow: 'bg-amber-500/20'
+    title: 'AICTE APPROVED',
+    value: 'Since 2020',
+    color: 'text-amber-600',
+    bg: 'bg-amber-50'
   },
   {
-    icon: Target,
-    title: 'NIRF RANKED #12',
-    description: 'Among top educational platforms in India - Ministry of Education ranking',
-    color: 'from-emerald-500 to-teal-600',
-    bgGlow: 'bg-emerald-500/20'
-  },
-  {
-    icon: Globe,
-    title: 'GLOBAL RECOGNITION',
-    description: 'Credits transferable to 50+ international universities across 15 countries',
-    color: 'from-blue-500 to-cyan-600',
-    bgGlow: 'bg-blue-500/20'
-  },
-  {
-    icon: Medal,
-    title: 'SKILL INDIA PARTNER',
-    description: 'Official training partner for Ministry of Skill Development & Entrepreneurship',
-    color: 'from-red-500 to-rose-600',
-    bgGlow: 'bg-red-500/20'
-  },
-  {
-    icon: Shield,
-    title: 'ISO 21001:2018',
-    description: 'Certified educational management system for quality learning outcomes',
-    color: 'from-violet-500 to-purple-600',
-    bgGlow: 'bg-violet-500/20'
+    icon: Clock,
+    title: 'AVG. HIRING',
+    value: '48 Hours',
+    color: 'text-purple-600',
+    bg: 'bg-purple-50'
   },
 ]
 
-const successStories = [
-  {
-    name: 'Priya Sharma',
-    role: 'SDE Intern → Full-time',
-    company: 'Google India',
-    stipend: '₹50,000/month',
-    image: '/student1.jpg',
-    rating: 5,
-    quote: 'InternAdda verified internship helped me crack Google. Transparent process, no middlemen.'
-  },
-  {
-    name: 'Rahul Verma',
-    role: 'Data Science Intern',
-    company: 'Microsoft',
-    stipend: '₹45,000/month',
-    image: '/student2.jpg',
-    rating: 5,
-    quote: 'The blockchain certificate got me instant recognition. Hired within 2 weeks of completion.'
-  },
-  {
-    name: 'Ananya Reddy',
-    role: 'Product Intern',
-    company: 'Amazon',
-    stipend: '₹40,000/month',
-    image: '/student3.jpg',
-    rating: 5,
-    quote: 'From Tier-3 college to Amazon. InternAdda made it possible with quality opportunities.'
-  },
+const partners = [
+  { name: 'IIT Delhi', logo: '🎓' },
+  { name: 'BITS Pilani', logo: '🔬' },
+  { name: 'NASSCOM', logo: '🏢' },
+  { name: 'Microsoft', logo: '💻' },
+  { name: 'Google', logo: '🌐' },
+  { name: 'Amazon', logo: '📦' },
 ]
 
-const universityPartners = [
-  { name: 'IIT Delhi', logo: '🎓', type: 'Premium Partner' },
-  { name: 'BITS Pilani', logo: '🔬', type: 'Research Partner' },
-  { name: 'VIT Vellore', logo: '🏛️', type: 'Academic Partner' },
-  { name: 'Manipal Academy', logo: '📚', type: 'Curriculum Partner' },
-  { name: 'DTU Delhi', logo: '⚙️', type: 'Engineering Partner' },
-  { name: 'SP Jain', logo: '💼', type: 'Business Partner' },
+const globalPartners = [
+  { name: 'Tracxn', quote: '"Most trusted internship platform in India."', logo: '📊' },
+  { name: 'YourStory', quote: '"Transparent, student-focused ecosystem."', logo: '📰' },
+  { name: 'NASSCOM', quote: '"Bridging industry-academia gap effectively."', logo: '🏢' },
 ]
 
-const trustIndicators = [
-  { icon: Shield, label: 'Govt. Registered', color: 'text-emerald-500' },
-  { icon: CheckCircle, label: 'MSME Verified', color: 'text-blue-500' },
-  { icon: Award, label: 'ISO Certified', color: 'text-amber-500' },
-  { icon: Gem, label: 'AICTE Approved', color: 'text-purple-500' },
-]
+const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg', '/slide5.jpg', '/slide6.jpg'];
 
 export default function Home() {
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [slideIndex, setSlideIndex] = useState(0)
 
-  // Auto-scrolling logic for the Collaboration visual
   useEffect(() => {
     const timer = setInterval(() => {
       setSlideIndex((prev) => (prev + 1) % collaborationSlides.length)
@@ -205,672 +123,305 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleCarouselNext = () => {
-    setCarouselIndex((prev) => (prev + 1) % globalPartners.length)
-  }
-
-  const handleCarouselPrev = () => {
-    setCarouselIndex((prev) => (prev - 1 + globalPartners.length) % globalPartners.length)
-  }
-
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-background">
-        {/* Educational Trust Badge Strip - NEW */}
-        <section className="bg-gradient-to-r from-indigo-900/20 via-purple-900/20 to-pink-900/20 border-b border-indigo-500/30">
-          <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
-                {trustIndicators.map((item, idx) => {
-                  const Icon = item.icon
-                  return (
-                    <div key={idx} className="flex items-center gap-2">
-                      <Icon className={`${item.color}`} size={18} />
-                      <span className="text-xs font-semibold text-foreground">{item.label}</span>
-                    </div>
-                  )
-                })}
-                <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 px-3 py-1">
-                  <Crown size={14} className="mr-1" /> TrustScore 4.9 ★
-                </Badge>
+      <main className="min-h-screen bg-white">
+        {/* Trust Badge Strip - Navy Blue */}
+        <div className="bg-[#0A2647] text-white py-2">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm">
+              <div className="flex items-center gap-2">
+                <CheckCircle size={14} className="text-[#FFD700]" />
+                <span>AICTE APPROVED</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Award size={14} className="text-[#FFD700]" />
+                <span>NAAC A++</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield size={14} className="text-[#FFD700]" />
+                <span>ISO 21001:2018</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <GraduationCap size={14} className="text-[#FFD700]" />
+                <span>MSME REGISTERED</span>
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* Compact Hero Section */}
-        <section className="relative py-8 sm:py-12 md:py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-foreground/95" />
-          
-          <div className="relative w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center lg:min-h-[400px]">
-                {/* Left Content */}
-                <motion.div
-                  className="space-y-8"
-                  initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <motion.div
-                    className="inline-flex flex-wrap gap-2"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/40 px-4 py-2 rounded-full">
-                      <CheckCircle size={16} className="mr-2" />
-                      AICTE APPROVED
-                    </Badge>
-                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/40 px-4 py-2 rounded-full">
-                      <Award size={16} className="mr-2" />
-                      NAAC A++ RATED
-                    </Badge>
-                  </motion.div>
+        {/* Hero Section - Clean Navy & White */}
+        <section className="relative bg-gradient-to-br from-[#0A2647] to-[#144272]">
+          <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left Content */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Badge className="bg-[#FFD700]/20 text-[#FFD700] border-[#FFD700]/30 px-4 py-2 rounded-full mb-6">
+                  India's #1 Internship Platform
+                </Badge>
+                
+                <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
+                  Launch Your Career with{' '}
+                  <span className="text-[#FFD700]">Verified Internships</span>
+                </h1>
+                
+                <p className="text-lg text-gray-300 mb-8">
+                  7,200+ students placed • 500+ verified companies • Direct interviews
+                </p>
 
-                  <motion.div
-                    className="space-y-3"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                  >
-                    <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight text-balance">
-                      India's Largest<br />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-secondary">
-                        Internship Ecosystem
-                      </span>
-                    </h1>
-                    <p className="text-base sm:text-lg text-gray-300 max-w-lg leading-relaxed">
-                      7000+ students enrolled. Verified companies. Transparent stipends. Direct interviews. No middlemen.
-                    </p>
-                  </motion.div>
+                <div className="flex flex-wrap gap-4 mb-8">
+                  <Button className="bg-[#FFD700] text-[#0A2647] hover:bg-[#FFD700]/90 font-semibold px-8 py-6 text-base rounded-lg">
+                    Find Internships
+                    <ArrowRight className="ml-2" size={20} />
+                  </Button>
+                  <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-base rounded-lg bg-transparent">
+                    For Employers
+                  </Button>
+                </div>
 
-                  <motion.div
-                    className="flex flex-col sm:flex-row gap-4"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                  >
-                    <Button
-                      size="lg"
-                      className="bg-primary text-white hover:bg-primary/90 font-semibold text-base px-8 py-6 rounded-lg shadow-lg hover:shadow-xl transition-all"
-                    >
-                      Find Internships
-                      <ArrowRight className="ml-2" size={20} />
-                    </Button>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="border-2 border-white text-white hover:bg-white/10 font-semibold text-base px-8 py-6 rounded-lg bg-transparent"
-                    >
-                      Practice Mode
-                    </Button>
-                  </motion.div>
-
-                  {/* Social Proof with Student Images */}
-                  <motion.div
-                    className="flex items-center gap-4 pt-4"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                  >
-                    <div className="flex -space-x-3">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div
-                          key={i}
-                          className="w-10 h-10 rounded-full border-2 border-foreground overflow-hidden bg-gray-800"
-                        >
-                          <img 
-                            src={`/student${i}.jpg`} 
-                            alt={`Student ${i}`} 
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-gray-200 font-semibold">
-                      7,000+ <span className="text-gray-400">STUDENTS ENROLLED</span>
-                    </p>
-                  </motion.div>
-                </motion.div>
-
-                {/* Right Visual - Auto Scrolling Collaborations */}
-                <motion.div
-                  className="relative h-64 lg:h-80 rounded-2xl overflow-hidden hidden lg:block border border-white/10"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  <AnimatePresence mode='wait'>
-                    <motion.img
-                      key={slideIndex}
-                      src={collaborationSlides[slideIndex]}
-                      alt="Our Collaborations"
-                      className="absolute inset-0 w-full h-full object-cover"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8 }}
-                    />
-                  </AnimatePresence>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                    {collaborationSlides.map((_, i) => (
-                      <div 
-                        key={i} 
-                        className={`h-1.5 rounded-full transition-all ${slideIndex === i ? 'bg-primary w-6' : 'bg-white/40 w-1.5'}`}
-                      />
+                {/* Student Count */}
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="w-10 h-10 rounded-full border-2 border-[#0A2647] overflow-hidden bg-gray-200">
+                        <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400" />
+                      </div>
                     ))}
                   </div>
-                </motion.div>
-              </div>
-
-              {/* Bottom Stats Row */}
-              <motion.div
-                className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-12 border-t border-white/10"
-                variants={staggerContainer}
-                initial="initial"
-                animate="whileInView"
-              >
-                {homeStats.map((stat) => {
-                  const Icon = stat.icon
-                  return (
-                    <motion.div
-                      key={stat.label}
-                      className="space-y-2"
-                      variants={fadeInUp}
-                    >
-                      <Icon className="text-secondary" size={28} />
-                      <p className="text-3xl sm:text-4xl font-black text-white">{stat.value}</p>
-                      <p className="text-xs text-gray-400 font-semibold">{stat.label}</p>
-                    </motion.div>
-                  )
-                })}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Educational Excellence Banner - NEW */}
-        <section className="py-12 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950/30 dark:via-purple-950/30 dark:to-pink-950/30 border-y border-indigo-200 dark:border-indigo-800/30">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="text-center mb-8"
-                {...fadeInUp}
-              >
-                <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 px-4 py-2 mb-4">
-                  <Sparkles size={16} className="mr-2" /> EDUCATIONAL EXCELLENCE
-                </Badge>
-                <h2 className="text-3xl sm:text-4xl font-black text-foreground mb-4">
-                  Trusted by India's <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">Top Educational Bodies</span>
-                </h2>
-                <p className="text-muted-foreground">Officially recognized & accredited by national education authorities</p>
+                  <p className="text-white">
+                    <span className="font-bold text-[#FFD700]">7,200+</span> students enrolled
+                  </p>
+                </div>
               </motion.div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {educationalTrustElements.map((item, idx) => {
-                  const Icon = item.icon
-                  return (
-                    <motion.div
-                      key={idx}
-                      className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all group"
-                      whileHover={{ y: -4 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                    >
-                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${item.color} bg-opacity-20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                        <Icon className="text-white" size={20} />
-                      </div>
-                      <h3 className="font-bold text-sm text-foreground mb-1">{item.title}</h3>
-                      <p className="text-xs text-muted-foreground">{item.description}</p>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* University Partners Strip - NEW */}
-        <section className="py-8 bg-gradient-to-r from-blue-600/5 to-indigo-600/5 border-y border-blue-200/50 dark:border-blue-800/30">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
+              {/* Right Visual */}
               <motion.div
-                className="flex flex-wrap items-center justify-center gap-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
+                className="relative h-80 rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
               >
-                <p className="text-sm font-semibold text-muted-foreground flex items-center">
-                  <HeartHandshake size={16} className="mr-2 text-primary" /> ACADEMIC PARTNERS
-                </p>
-                {universityPartners.map((uni, idx) => (
-                  <motion.div
-                    key={idx}
-                    className="flex items-center gap-2"
-                    whileHover={{ scale: 1.05 }}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                  >
-                    <span className="text-2xl">{uni.logo}</span>
-                    <div>
-                      <p className="font-bold text-sm text-foreground">{uni.name}</p>
-                      <p className="text-xs text-primary">{uni.type}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Quality Assurance Section */}
-        <section className="py-16 sm:py-20 bg-background">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="text-center mb-16 space-y-3"
-                {...fadeInUp}
-              >
-                <h2 className="text-4xl sm:text-5xl font-black text-foreground">How we ensure quality.</h2>
-              </motion.div>
-
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <motion.div
-                  className="space-y-8"
-                  variants={staggerContainer}
-                  initial="initial"
-                  whileInView="whileInView"
-                  viewport={{ once: true }}
-                >
-                  {qualityMetrics.map((metric, idx) => (
-                    <motion.div
-                      key={idx}
-                      className="flex gap-6 group"
-                      variants={fadeInUp}
-                    >
-                      <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold text-xl group-hover:bg-primary/20 transition-colors">
-                        {metric.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-black text-foreground mb-2">{metric.title}</h3>
-                        <p className="text-muted-foreground leading-relaxed">{metric.description}</p>
-                      </div>
-                    </motion.div>
+                <AnimatePresence mode='wait'>
+                  <motion.img
+                    key={slideIndex}
+                    src={collaborationSlides[slideIndex]}
+                    alt="Collaborations"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8 }}
+                  />
+                </AnimatePresence>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A2647]/80 to-transparent" />
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                  {collaborationSlides.map((_, i) => (
+                    <div key={i} className={`h-1.5 rounded-full transition-all ${slideIndex === i ? 'bg-[#FFD700] w-6' : 'bg-white/40 w-1.5'}`} />
                   ))}
-                </motion.div>
-
-                {/* Global Recognition Carousel */}
-                <motion.div
-                  className="space-y-6"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  viewport={{ once: true }}
-                >
-                  <p className="text-xs font-black text-primary tracking-wider">OUR COLLABORATIONS</p>
-                  
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 sm:p-8 border border-gray-700 min-h-[200px] flex flex-col justify-between">
-                    <blockquote className="space-y-4">
-                      <p className="text-lg sm:text-xl font-semibold text-white italic leading-relaxed">
-                        {globalPartners[carouselIndex].quote}
-                      </p>
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-xl font-bold">
-                          {globalPartners[carouselIndex].logo}
-                        </div>
-                        <div>
-                          <p className="font-black text-white">{globalPartners[carouselIndex].name}</p>
-                          <p className="text-sm text-gray-400">{globalPartners[carouselIndex].title}</p>
-                        </div>
-                      </div>
-                    </blockquote>
-                    
-                    <div className="flex items-center justify-between gap-4 mt-6">
-                      <div className="flex items-center gap-2">
-                        {globalPartners.map((_, idx) => (
-                          <button
-                            key={`dot-${idx}`}
-                            onClick={() => setCarouselIndex(idx)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                              idx === carouselIndex ? 'bg-primary w-6' : 'bg-gray-600'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={handleCarouselPrev}
-                          className="p-2 rounded-lg bg-primary/20 hover:bg-primary/30 text-primary transition-colors"
-                        >
-                          <ChevronLeft size={20} />
-                        </button>
-                        <button
-                          onClick={handleCarouselNext}
-                          className="p-2 rounded-lg bg-primary/20 hover:bg-primary/30 text-primary transition-colors"
-                        >
-                          <ChevronRight size={20} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Domain Filter Section */}
-        <section className="py-8 bg-background border-b border-border">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <h2 className="text-lg font-semibold text-foreground">Select Domain</h2>
-                <p className="text-sm text-muted-foreground hidden sm:block">Filter by work type</p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Button className="bg-primary text-white hover:bg-primary/90 rounded-full">All</Button>
-                {skills.map((skill) => (
-                  <Button
-                    key={skill}
-                    variant="outline"
-                    className="border-border text-foreground hover:border-primary hover:text-primary rounded-full bg-transparent"
-                  >
-                    {skill}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Section */}
-        <section className="py-12 sm:py-16 bg-card border-b border-border">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="grid grid-cols-2 md:grid-cols-4 gap-6"
-                variants={staggerContainer}
-                initial="initial"
-                whileInView="whileInView"
-                viewport={{ once: true }}
-              >
-                {stats.map((stat) => {
-                  const Icon = stat.icon
-                  return (
-                    <motion.div
-                      key={stat.label}
-                      className="text-center space-y-2"
-                      variants={fadeInUp}
-                    >
-                      <div className="flex justify-center">
-                        <Icon className="text-primary" size={32} />
-                      </div>
-                      <p className="text-3xl sm:text-4xl font-bold text-foreground">{stat.value}</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
-                    </motion.div>
-                  )
-                })}
+                </div>
               </motion.div>
             </div>
+
+            {/* Trust Metrics */}
+            <motion.div
+              className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-8 border-t border-white/10"
+              variants={staggerContainer}
+              initial="initial"
+              animate="whileInView"
+            >
+              {trustMetrics.map((metric) => {
+                const Icon = metric.icon
+                return (
+                  <motion.div key={metric.title} variants={fadeInUp} className="text-white">
+                    <Icon className="text-[#FFD700] mb-2" size={24} />
+                    <p className="text-xl font-bold">{metric.value}</p>
+                    <p className="text-xs text-gray-400">{metric.title}</p>
+                  </motion.div>
+                )
+              })}
+            </motion.div>
           </div>
         </section>
 
-        {/* Success Stories Section - NEW */}
-        <section className="py-16 sm:py-20 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 dark:from-indigo-950/20 dark:to-purple-950/20">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="text-center mb-12 space-y-3"
-                {...fadeInUp}
-              >
-                <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 px-4 py-2">
-                  <Trophy size={16} className="mr-2" /> SUCCESS STORIES
-                </Badge>
-                <h2 className="text-4xl sm:text-5xl font-black text-foreground">
-                  From Interns to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Industry Leaders</span>
-                </h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  85% of our interns receive pre-placement offers from dream companies
-                </p>
-              </motion.div>
+        {/* Partner Strip - Light Gray */}
+        <div className="bg-gray-50 py-6 border-y border-gray-200">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+              <p className="text-sm font-semibold text-gray-500">TRUSTED BY</p>
+              {partners.map((partner, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <span className="text-2xl">{partner.logo}</span>
+                  <span className="font-medium text-gray-700">{partner.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-              <div className="grid md:grid-cols-3 gap-6">
-                {successStories.map((story, idx) => (
+        {/* Featured Internships */}
+        <section className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-4">
+            <motion.div className="text-center mb-12" {...fadeInUp}>
+              <Badge className="bg-[#0A2647] text-white px-4 py-2 rounded-full mb-4">
+                FEATURED OPPORTUNITIES
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0A2647] mb-4">
+                Top Internships This Week
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Verified positions from India's fastest growing companies
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="whileInView"
+              viewport={{ once: true }}
+            >
+              {featuredInternships.map((internship) => (
+                <motion.div key={internship.id} variants={fadeInUp}>
+                  <InternshipCard {...internship} />
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <div className="text-center mt-12">
+              <Button className="bg-[#0A2647] text-white hover:bg-[#0A2647]/90 px-8 py-6 rounded-lg">
+                View All 300+ Internships
+                <ArrowRight className="ml-2" size={20} />
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Quality Assurance - Clean Cards */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <motion.div className="text-center mb-12" {...fadeInUp}>
+              <Badge className="bg-[#FFD700] text-[#0A2647] px-4 py-2 rounded-full mb-4">
+                WHY WE'RE DIFFERENT
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0A2647] mb-4">
+                Quality You Can Trust
+              </h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: Shield,
+                  title: 'Manual Employer Audit',
+                  description: 'Every company verified through MCA/MSME records before listing',
+                  color: 'text-emerald-600',
+                  bg: 'bg-emerald-100'
+                },
+                {
+                  icon: CheckCircle,
+                  title: 'Direct Interview Routing',
+                  description: 'Your application reaches decision makers directly, no middlemen',
+                  color: 'text-blue-600',
+                  bg: 'bg-blue-100'
+                },
+                {
+                  icon: Award,
+                  title: 'Blockchain Certificates',
+                  description: 'Verified credentials recognized by 150+ global companies',
+                  color: 'text-amber-600',
+                  bg: 'bg-amber-100'
+                }
+              ].map((item, idx) => {
+                const Icon = item.icon
+                return (
                   <motion.div
                     key={idx}
-                    className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-all"
+                    className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                     whileHover={{ y: -4 }}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary">
-                        <img src={story.image} alt={story.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div>
-                        <p className="font-black text-foreground">{story.name}</p>
-                        <p className="text-sm text-primary font-semibold">{story.role}</p>
-                        <p className="text-xs text-muted-foreground">{story.company}</p>
-                      </div>
+                    <div className={`w-14 h-14 ${item.bg} rounded-xl flex items-center justify-center mb-6`}>
+                      <Icon className={item.color} size={28} />
                     </div>
-                    <div className="flex items-center gap-1 mb-3">
-                      {[...Array(story.rating)].map((_, i) => (
-                        <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-sm text-muted-foreground italic">"{story.quote}"</p>
-                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-                      <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-0">
-                        {story.stipend}
-                      </Badge>
-                    </div>
+                    <h3 className="font-bold text-lg text-[#0A2647] mb-3">{item.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{item.description}</p>
                   </motion.div>
-                ))}
-              </div>
+                )
+              })}
             </div>
           </div>
         </section>
 
-        {/* Featured Opportunities Section */}
-        <section className="py-16 sm:py-20 bg-background border-t border-border">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="text-center mb-12 space-y-6"
-                {...fadeInUp}
-              >
-                <div className="space-y-3">
-                  <h2 className="text-4xl sm:text-5xl font-black text-foreground">Featured Opportunities</h2>
-                  <p className="text-muted-foreground text-base">Top internships this week • <button className="text-primary font-semibold hover:underline">View all for more</button></p>
-                </div>
-                <div className="flex gap-2 justify-center overflow-x-auto pb-2 sm:pb-0">
-                  <Button className="bg-foreground text-white hover:bg-foreground/90 rounded-full px-6 whitespace-nowrap text-sm">All Internships</Button>
-                  <Button variant="outline" className="border-border hover:border-primary text-foreground rounded-full px-6 whitespace-nowrap bg-transparent text-sm">Web Dev</Button>
-                  <Button variant="outline" className="border-border hover:border-primary text-foreground rounded-full px-6 whitespace-nowrap bg-transparent text-sm">Data Science</Button>
-                  <Button variant="outline" className="border-border hover:border-primary text-foreground rounded-full px-6 whitespace-nowrap bg-transparent text-sm">Python</Button>
-                </div>
-              </motion.div>
+        {/* Recognition Carousel - Minimal */}
+        <section className="py-16 bg-white">
+          <div className="max-w-4xl mx-auto px-4">
+            <motion.div className="text-center mb-8" {...fadeInUp}>
+              <Badge className="bg-[#0A2647] text-white px-4 py-2 rounded-full mb-4">
+                INDUSTRY RECOGNITION
+              </Badge>
+            </motion.div>
 
-              <motion.div
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                variants={staggerContainer}
-                initial="initial"
-                whileInView="whileInView"
-                viewport={{ once: true }}
-              >
-                {featuredInternships.map((internship) => (
-                  <motion.div key={internship.id} variants={fadeInUp}>
-                    <InternshipCard {...internship} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
+            <div className="bg-gradient-to-br from-[#0A2647] to-[#144272] rounded-2xl p-8 text-white">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={carouselIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="text-center"
+                >
+                  <p className="text-xl md:text-2xl font-medium italic mb-6">
+                    {globalPartners[carouselIndex].quote}
+                  </p>
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="text-3xl">{globalPartners[carouselIndex].logo}</span>
+                    <span className="font-bold text-[#FFD700]">{globalPartners[carouselIndex].name}</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
-        {/* Why InternAdda Section */}
-        <section className="py-16 sm:py-20 bg-card border-t border-border">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                className="text-center mb-16 space-y-3"
-                {...fadeInUp}
-              >
-                <h2 className="text-4xl sm:text-5xl font-black text-foreground">Why Choose InternAdda?</h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Everything you need to launch your career with confidence
-                </p>
-              </motion.div>
-
-              <motion.div
-                className="grid md:grid-cols-3 gap-8"
-                variants={staggerContainer}
-                initial="initial"
-                whileInView="whileInView"
-                viewport={{ once: true }}
-              >
-                {[
-                  {
-                    icon: Briefcase,
-                    title: 'Verified Opportunities',
-                    description: 'Every position is from verified companies with transparent stipends and career growth.',
-                  },
-                  {
-                    icon: TrendingUp,
-                    title: 'Real Career Growth',
-                    description: 'Work on meaningful projects, build portfolio, and get recommendations from industry experts.',
-                  },
-                  {
-                    icon: BookOpen,
-                    title: 'Learn & Earn',
-                    description: 'Get mentored by professionals, earn competitive stipends, and gain certifications.',
-                  },
-                ].map((feature, idx) => (
-                  <motion.div
+              <div className="flex justify-center gap-2 mt-8">
+                {globalPartners.map((_, idx) => (
+                  <button
                     key={idx}
-                    className="p-8 bg-background border border-border rounded-2xl hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 space-y-4 group"
-                    variants={fadeInUp}
-                  >
-                    <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="text-primary" size={28} />
-                    </div>
-                    <h3 className="font-black text-lg text-foreground">{feature.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                  </motion.div>
+                    onClick={() => setCarouselIndex(idx)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      idx === carouselIndex ? 'bg-[#FFD700] w-6' : 'bg-white/30'
+                    }`}
+                  />
                 ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Accreditation Strip - NEW */}
-        <section className="py-10 bg-gradient-to-r from-slate-900 to-gray-900 text-white">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex flex-wrap items-center justify-between gap-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Medal size={24} className="text-amber-400" />
-                  </div>
-                  <div>
-                    <p className="font-black text-lg">ISO 21001:2018 Certified</p>
-                    <p className="text-sm text-gray-400">Educational Organization Management System</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Globe size={24} className="text-emerald-400" />
-                  </div>
-                  <div>
-                    <p className="font-black text-lg">NIRF Ranked #12</p>
-                    <p className="text-sm text-gray-400">Among Top Educational Platforms in India</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <GraduationCap size={24} className="text-purple-400" />
-                  </div>
-                  <div>
-                    <p className="font-black text-lg">AICTE Approved</p>
-                    <p className="text-sm text-gray-400">Official Internship Partner</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Final CTA Section */}
-        <section className="py-20 sm:py-28 bg-background border-t border-border">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center space-y-8">
-              <motion.h2
-                className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground"
-                {...fadeInUp}
-              >
-                Ready to integrate into the professional workforce?
-              </motion.h2>
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-                {...fadeInUp}
-              >
-                <Button
-                  size="lg"
-                  className="bg-primary text-white hover:bg-primary/90 font-bold px-10 py-6 text-base"
-                >
-                  APPLY NOW
+        {/* Final CTA - Navy & Gold */}
+        <section className="py-20 bg-[#0A2647]">
+          <div className="max-w-3xl mx-auto px-4 text-center">
+            <motion.div {...fadeInUp}>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Ready to Start Your Journey?
+              </h2>
+              <p className="text-xl text-gray-300 mb-8">
+                Join 7,200+ students who found their dream internship
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button className="bg-[#FFD700] text-[#0A2647] hover:bg-[#FFD700]/90 font-semibold px-8 py-6 text-base rounded-lg">
+                  Browse Internships
+                  <ArrowRight className="ml-2" size={20} />
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-foreground text-foreground hover:bg-foreground/5 font-bold px-10 py-6 text-base bg-transparent"
-                >
-                  PARTNER WITH US
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-base rounded-lg bg-transparent">
+                  Partner With Us
                 </Button>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Bottom CTA Section */}
-        <section className="py-20 sm:py-32 bg-primary text-primary-foreground">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-            <motion.h2
-              className="text-3xl sm:text-4xl font-bold"
-              {...fadeInUp}
-            >
-              Ready to Start Your Internship Journey?
-            </motion.h2>
-            <motion.p
-              className="text-lg text-primary-foreground/90 max-w-2xl mx-auto"
-              {...fadeInUp}
-            >
-              Join thousands of students who have found their ideal internship on InternAdda. Browse, apply, and get placed today.
-            </motion.p>
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              {...fadeInUp}
-            >
-              <Button
-                size="lg"
-                className="bg-background text-primary hover:bg-background/90"
-              >
-                Explore Internships
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 bg-transparent"
-              >
-                Contact Us
-              </Button>
+              </div>
             </motion.div>
           </div>
         </section>
