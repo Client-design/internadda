@@ -4,7 +4,6 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { InternshipCard } from '@/components/InternshipCard'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Users, CheckCircle, Shield, Clock, GraduationCap, Award, Zap, Star, Briefcase, TrendingUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -32,11 +31,11 @@ const featuredInternships = [
     company: 'Arjuna AI Solutions',
     stipend: '₹2,000 - ₹8,000',
     location: 'Remote',
-    duration: '3-6 months',
     skills: ['Python', 'Django', 'PostgreSQL'],
     applicants: 131,
-    isRecommended: true,
-    image: '/python.jpg'
+    image: '/python.jpg',
+    otherCompaniesCount: 36,
+    companyLogos: ['/company1.jpg', '/company2.jpg', '/company3.jpg']
   },
   {
     id: '2',
@@ -44,11 +43,11 @@ const featuredInternships = [
     company: 'InternAdda Enterprises',
     stipend: '₹2,500 - ₹5,000',
     location: 'Remote',
-    duration: '2-3 months',
     skills: ['React', 'Next.js', 'Tailwind'],
     applicants: 150,
-    isRecommended: true,
-    image: '/react.jpg'
+    image: '/react.jpg',
+    otherCompaniesCount: 21,
+    companyLogos: ['/company4.jpg', '/company5.jpg', '/company1.jpg']
   },
   {
     id: '3',
@@ -56,36 +55,89 @@ const featuredInternships = [
     company: 'Larex Systems',
     stipend: '₹3,000 - ₹7,000',
     location: 'Remote',
-    duration: '3-6 months',
     skills: ['Python', 'Pandas', 'Matplotlib'],
     applicants: 130,
-    isRecommended: true,
-    image: '/datascience.jpg'
+    image: '/datascience.jpg',
+    otherCompaniesCount: 21,
+    companyLogos: ['/company2.jpg', '/company3.jpg', '/company4.jpg']
   },
 ]
 
-const trustMetrics = [
-  { icon: Shield, title: '100% VERIFIED', value: '500+ Companies' },
-  { icon: Users, title: 'ACTIVE STUDENTS', value: '7,200+' },
-  { icon: Award, title: 'Verified Internship', value: 'Since 2020' },
-  { icon: Clock, title: 'AVG. HIRING', value: '48 Hours' },
-]
+// Enhanced Internship Card with Logo Stack
+const InternshipCard = ({ title, company, stipend, location, skills, applicants, otherCompaniesCount, image, companyLogos }: any) => (
+  <div className="bg-white rounded-[2.5rem] border border-blue-50 shadow-xl overflow-hidden w-full max-w-[420px] flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-blue-200">
+    {/* Hero Image Section */}
+    <div className="relative h-56 w-full bg-gray-100 overflow-hidden">
+      <Image 
+        src={image} 
+        alt={title} 
+        fill 
+        className="object-cover group-hover:scale-105 transition-transform duration-500"
+      />
+      {/* Applied Badge */}
+      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/20">
+        <span className="text-orange-500 text-xs">🔥</span>
+        <span className="text-white text-[10px] font-bold tracking-tight">{applicants} Applied</span>
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+    </div>
 
-const partners = [
-  { name: 'Delhi University', logo: '🎓' },
-  { name: 'LAREX', logo: '🔬' },
-  { name: 'Tracxn', logo: '🌐' },
-  { name: 'Arjuna-AI', logo: '💻' },
-]
+    {/* Content Section */}
+    <div className="px-8 pb-8 pt-2 flex flex-col items-center text-center">
+      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
+        HIRING AT {company} & OTHERS
+      </p>
 
-const globalPartners = [
-  { name: 'Tracxn', quote: '"Most trusted internship platform in India."', logo: '🌐' },
-  { name: 'LAREX', quote: '"Transparent, student-focused ecosystem."', logo: '🌐' },
-  { name: 'Arjuna-AI', quote: '"Bridging industry-academia gap effectively."', logo: '🌐' },
-]
+      {/* Company Logo Stack & Count */}
+      <div className="flex items-center justify-center gap-3 mb-6">
+        <div className="flex -space-x-3">
+          {companyLogos.map((logo: string, idx: number) => (
+            <div key={idx} className="relative w-9 h-9 rounded-full border-2 border-white bg-white shadow-sm overflow-hidden">
+              <Image src={logo} alt="Partner" fill className="object-cover" />
+            </div>
+          ))}
+        </div>
+        <span className="text-blue-600 text-[13px] font-bold">+{otherCompaniesCount} more companies</span>
+      </div>
 
-const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg', '/slide5.jpg', '/slide6.jpg'];
-const studentAvatars = ['/student1.jpg', '/student2.jpg', '/student3.jpg', '/student4.jpg'];
+      <h3 className="text-2xl font-extrabold text-[#0A2647] mb-6 leading-snug group-hover:text-blue-700 transition-colors">
+        {title}
+      </h3>
+
+      {/* Stipend & Location */}
+      <div className="grid grid-cols-2 w-full border-y border-gray-100 py-5 mb-6">
+        <div className="border-r border-gray-100 flex flex-col items-center">
+          <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Stipend</p>
+          <p className="text-blue-600 font-extrabold text-base">{stipend}</p>
+        </div>
+        <div className="flex flex-col items-center">
+          <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Location</p>
+          <p className="text-gray-700 font-extrabold text-base">{location}</p>
+        </div>
+      </div>
+
+      {/* Skills Required */}
+      <div className="w-full mb-8">
+        <p className="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Skills Required</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {skills.map((skill: string) => (
+            <span key={skill} className="bg-gray-50 border border-gray-100 px-4 py-1.5 rounded-xl text-xs font-bold text-gray-600">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <Button className="w-full bg-[#0A2647] hover:bg-[#144272] text-white py-8 rounded-[1.25rem] font-extrabold text-lg shadow-lg shadow-blue-900/10 transition-all active:scale-95">
+        Apply Now
+      </Button>
+      
+      <p className="text-[10px] text-gray-400 font-semibold mt-5 uppercase tracking-widest">
+        Next Batch Starts Soon <span className="mx-1">•</span> Direct Selection
+      </p>
+    </div>
+  </div>
+)
 
 export default function Home() {
   const [carouselIndex, setCarouselIndex] = useState(0)
@@ -98,10 +150,33 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
+  const trustMetrics = [
+    { icon: Shield, title: '100% VERIFIED', value: '500+ Companies' },
+    { icon: Users, title: 'ACTIVE STUDENTS', value: '7,200+' },
+    { icon: Award, title: 'Verified Internship', value: 'Since 2020' },
+    { icon: Clock, title: 'AVG. HIRING', value: '48 Hours' },
+  ]
+
+  const partners = [
+    { name: 'Delhi University', logo: '🎓' },
+    { name: 'LAREX', logo: '🔬' },
+    { name: 'Tracxn', logo: '🌐' },
+    { name: 'Arjuna-AI', logo: '💻' },
+  ]
+
+  const globalPartners = [
+    { name: 'Tracxn', quote: '"Most trusted internship platform in India."', logo: '🌐' },
+    { name: 'LAREX', quote: '"Transparent, student-focused ecosystem."', logo: '🌐' },
+    { name: 'Arjuna-AI', quote: '"Bridging industry-academia gap effectively."', logo: '🌐' },
+  ]
+
+  const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg', '/slide5.jpg', '/slide6.jpg'];
+  const studentAvatars = ['/student1.jpg', '/student2.jpg', '/student3.jpg', '/student4.jpg'];
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white overflow-x-hidden">
+      <main className="min-h-screen bg-white overflow-x-hidden flex flex-col">
         {/* Trust Badge Strip */}
         <div className="bg-[#0A2647] text-white py-2">
           <div className="max-w-[1400px] mx-auto px-4 lg:px-8">
@@ -120,7 +195,7 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-[#0A2647] to-[#144272] overflow-hidden">
-          <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-12 md:py-20">
+          <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-12 md:py-20 flex flex-col items-center lg:block">
             <div className="grid lg:grid-cols-2 gap-10 items-center">
               {/* Left Content */}
               <motion.div
@@ -155,7 +230,7 @@ export default function Home() {
                   </Link>
                 </div>
 
-                <div className="flex items-center gap-3 justify-center">
+                <div className="flex items-center gap-3 justify-center lg:justify-start">
                   <div className="flex -space-x-3">
                     {studentAvatars.map((src, i) => (
                       <div key={i} className="relative w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-[#0A2647] overflow-hidden bg-gray-300">
@@ -222,8 +297,8 @@ export default function Home() {
         </section>
 
         {/* Partner Strip */}
-        <div className="bg-white py-8 border-b border-gray-100">
-          <div className="max-w-[1400px] mx-auto px-4">
+        <div className="bg-white py-8 border-b border-gray-100 flex justify-center">
+          <div className="max-w-[1400px] w-full mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 lg:gap-20">
               <p className="w-full text-center lg:w-auto text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4 lg:mb-0">Academic Partners</p>
               {partners.map((partner, idx) => (
@@ -236,27 +311,26 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Featured Internships - Fully Center Aligned */}
-        <section className="py-16 md:py-24 bg-white">
-          <div className="max-w-[1400px] mx-auto px-4 lg:px-8">
-            <motion.div className="text-center mb-12 md:mb-16 flex flex-col items-center" {...fadeInUp}>
+        {/* Internship Listings */}
+        <section className="py-16 md:py-24 bg-white flex flex-col items-center">
+          <div className="max-w-[1400px] w-full px-4 lg:px-8">
+            <motion.div className="text-center mb-16 flex flex-col items-center" {...fadeInUp}>
               <Badge className="bg-[#0A2647]/5 text-[#0A2647] px-4 py-1 rounded-full mb-4 text-xs font-bold border-none">
-                Recommended Listings
+                RECOMMENDED
               </Badge>
               <h2 className="text-3xl md:text-5xl font-extrabold text-[#0A2647] mb-4 tracking-tight">
                 Top Internships This Week
               </h2>
-              <p className="text-gray-500 max-w-2xl mx-auto text-base md:text-lg font-light">
-                Hand-picked opportunities from India&apos;s most promising startups and enterprises.
+              <p className="text-gray-500 max-w-2xl font-light">
+                Secure your future with positions at India's top tech startups.
               </p>
             </motion.div>
 
             <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
               variants={staggerContainer}
               initial="initial"
               whileInView="whileInView"
-              viewport={{ once: true }}
             >
               {featuredInternships.map((internship) => (
                 <motion.div key={internship.id} variants={fadeInUp} className="w-full flex justify-center">
@@ -265,172 +339,79 @@ export default function Home() {
               ))}
             </motion.div>
 
-            <div className="text-center mt-12 md:mt-16">
+            <div className="flex justify-center mt-16">
               <Link href="/internships">
-                <Button className="bg-[#0A2647] text-white hover:bg-[#0A2647]/95 px-8 py-6 text-base font-bold rounded-xl shadow-lg transition-transform active:scale-95">
-                  View All 99+ Internships
-                  <ArrowRight className="ml-2" size={20} />
+                <Button className="bg-[#0A2647] text-white hover:bg-black px-10 py-7 text-base font-bold rounded-2xl shadow-xl transition-all">
+                  Browse All Internships <ArrowRight className="ml-2" size={20} />
                 </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* The Gold Standard of Trust - Enhanced & Center Aligned */}
-        <section className="py-16 md:py-24 bg-gray-50/50">
-          <div className="max-w-[1200px] mx-auto px-4 lg:px-8">
+        {/* Gold Standard Section */}
+        <section className="py-20 bg-gray-50/50 flex flex-col items-center">
+          <div className="max-w-[1200px] w-full px-4 lg:px-8">
             <motion.div className="text-center mb-16 flex flex-col items-center" {...fadeInUp}>
               <div className="w-12 h-1 bg-[#FFD700] mb-6 rounded-full" />
-              <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2647] tracking-tight mb-4">
+              <h2 className="text-4xl font-extrabold text-[#0A2647] tracking-tight mb-4">
                 The Gold Standard of Trust
               </h2>
               <p className="text-gray-500 max-w-xl font-light">
-                We don't just list jobs; we curate careers. Every listing on InternAdda passes through our high-integrity verification engine.
+                Vetted by industry experts. Trusted by 7,200+ students.
               </p>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { icon: Shield, title: 'Verified Employers', description: 'Rigorous 3-step audit of company credentials, GST, and past intern feedback.', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { icon: Zap, title: 'Priority Access', description: 'No middlemen. Your applications go directly to hiring managers for faster results.', color: 'text-blue-600', bg: 'bg-blue-50' },
-                { icon: Star, title: 'Smart Credentials', description: 'Showcase your achievements with blockchain-backed, industry-recognized certificates.', color: 'text-amber-600', bg: 'bg-amber-50' }
-              ].map((item, idx) => {
-                const Icon = item.icon
-                return (
-                  <motion.div
-                    key={idx}
-                    className="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center flex flex-col items-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className={`w-16 h-16 ${item.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                      <Icon className={item.color} size={32} />
-                    </div>
-                    <h3 className="font-bold text-xl text-[#0A2647] mb-3">{item.title}</h3>
-                    <p className="text-gray-500 leading-relaxed text-sm md:text-base font-light">{item.description}</p>
-                  </motion.div>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* Recognition Carousel */}
-        <section className="py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <div className="bg-[#0A2647] rounded-[2.5rem] p-8 md:p-14 text-white shadow-2xl relative overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={carouselIndex}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  className="relative z-10"
-                >
-                  <p className="text-lg md:text-2xl font-light italic mb-8 leading-relaxed opacity-90">
-                    {globalPartners[carouselIndex].quote}
-                  </p>
-                  <div className="flex items-center justify-center gap-3">
-                    <span className="text-3xl">{globalPartners[carouselIndex].logo}</span>
-                    <span className="text-lg font-bold text-[#FFD700] tracking-tight">{globalPartners[carouselIndex].name}</span>
+                { icon: Shield, title: 'Employer Audit', description: 'Every company is vetted for legitimacy and work culture.', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { icon: Zap, title: 'Priority Access', description: 'Direct routes to HR. No middle-man delays.', color: 'text-blue-600', bg: 'bg-blue-50' },
+                { icon: Star, title: 'Smart Match', description: 'AI-driven matches based on your specific DU profile.', color: 'text-amber-600', bg: 'bg-amber-50' }
+              ].map((item, idx) => (
+                <motion.div key={idx} className="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center text-center">
+                  <div className={`w-16 h-16 ${item.bg} rounded-2xl flex items-center justify-center mb-6`}>
+                    <item.icon className={item.color} size={32} />
                   </div>
+                  <h3 className="font-bold text-xl text-[#0A2647] mb-3">{item.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
                 </motion.div>
-              </AnimatePresence>
-              <div className="flex justify-center gap-2 mt-10">
-                {globalPartners.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCarouselIndex(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === carouselIndex ? 'bg-[#FFD700] w-10' : 'bg-white/20 w-1.5'}`}
-                  />
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Final CTA - Enhanced & Modernized */}
-        <section className="py-24 md:py-32 relative overflow-hidden">
-          <div className="max-w-[1400px] mx-auto px-4 lg:px-8">
-            <div className="bg-[#0A2647] rounded-[2rem] md:rounded-[4rem] p-8 md:p-20 relative overflow-hidden shadow-2xl border border-white/10">
-              {/* Background Accents */}
-              <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-500/10 to-transparent pointer-events-none" />
+        {/* Final Premium CTA */}
+        <section className="py-24 flex flex-col items-center">
+          <div className="max-w-[1400px] w-full px-4 lg:px-8">
+            <div className="bg-[#0A2647] rounded-[3rem] md:rounded-[4rem] p-8 md:p-20 relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/10 blur-[100px] pointer-events-none" />
               
               <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
-                <motion.div 
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  className="text-left"
-                >
+                <div className="text-left">
                   <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-                    Ready to launch your <br />
+                    Ready to build your <br />
                     <span className="text-[#FFD700]">Dream Career?</span>
                   </h2>
-                  <p className="text-lg text-blue-100/80 mb-8 max-w-lg font-light leading-relaxed">
-                    Join 7,200+ students already scaling their careers. Don't just look for a job—find your future with InternAdda.
+                  <p className="text-lg text-blue-100/80 mb-8 max-w-lg font-light">
+                    Join the InternAdda ecosystem and start applying to verified roles today.
                   </p>
-                  
-                  <ul className="space-y-4 mb-10">
-                    {[
-                      'Access 500+ Verified Industry Roles',
-                      'Direct Applications to Decision Makers',
-                      'Globally Recognized Skill Certificates'
-                    ].map((text, i) => (
-                      <li key={i} className="flex items-center gap-3 text-white/90 font-medium">
-                        <CheckCircle size={18} className="text-[#FFD700]" />
-                        {text}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href="/internships" className="sm:w-auto">
-                      <Button className="w-full sm:w-auto bg-[#FFD700] text-[#0A2647] hover:bg-white hover:text-[#0A2647] font-extrabold px-10 py-7 text-lg rounded-2xl transition-all shadow-xl active:scale-95 flex items-center gap-2">
-                        Get Started Now <ArrowRight size={20} />
-                      </Button>
-                    </Link>
-                    <Link href="/about" className="sm:w-auto">
-                      <Button variant="outline" className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 px-10 py-7 text-lg rounded-2xl bg-transparent transition-all">
-                        Contact Support
-                      </Button>
-                    </Link>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="hidden lg:block relative"
-                >
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl">
-                    <div className="flex items-center gap-4 mb-6">
-                       <div className="w-12 h-12 bg-[#FFD700] rounded-full flex items-center justify-center text-[#0A2647]">
-                          <Briefcase size={24} />
-                       </div>
-                       <div>
-                         <p className="text-white font-bold">New Role Posted</p>
-                         <p className="text-white/60 text-sm">Just now</p>
-                       </div>
+                  <Link href="/internships">
+                    <Button className="bg-[#FFD700] text-[#0A2647] hover:bg-white px-10 py-7 text-lg rounded-2xl font-extrabold shadow-xl">
+                      Apply Today <ArrowRight className="ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+                <div className="hidden lg:block">
+                  <div className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2rem] flex items-center gap-6">
+                    <div className="w-16 h-16 bg-[#FFD700] rounded-full flex items-center justify-center text-[#0A2647]">
+                      <Briefcase size={32} />
                     </div>
-                    <div className="space-y-3">
-                       <div className="h-4 bg-white/10 rounded w-full" />
-                       <div className="h-4 bg-white/10 rounded w-5/6" />
-                       <div className="h-4 bg-white/10 rounded w-4/6" />
+                    <div>
+                      <p className="text-white text-xl font-bold">94% Success Rate</p>
+                      <p className="text-white/60">Across DU & National Colleges</p>
                     </div>
                   </div>
-                  {/* Floating Live Indicator */}
-                  <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3">
-                     <div className="bg-green-100 p-2 rounded-lg text-green-600 animate-pulse">
-                        <TrendingUp size={20} />
-                     </div>
-                     <div>
-                        <p className="text-xs text-gray-500 font-bold uppercase">Success Rate</p>
-                        <p className="text-[#0A2647] font-extrabold text-xl">94%</p>
-                     </div>
-                  </div>
-                </motion.div>
+                </div>
               </div>
             </div>
           </div>
