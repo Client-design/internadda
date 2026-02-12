@@ -46,7 +46,7 @@ export function Footer() {
               <div className="w-10 h-10 bg-[#FFD700] rounded-xl flex items-center justify-center text-[#0A2647] font-black shadow-lg">
                 I
               </div>
-              <span className="tracking-tight">InternAdda</span>
+              <span className="tracking-tight">Internadda</span>
             </Link>
             <p className="text-blue-100/60 text-sm leading-relaxed mb-8 max-w-sm">
               India's premier ecosystem for student growth. Bridging the gap between 
@@ -121,7 +121,7 @@ export function Footer() {
         {/* Bottom Credits */}
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-xs text-blue-100/40">
-            © {currentYear} <span className="text-white font-medium">InternAdda Enterprises</span>. All rights reserved.
+            © {currentYear} <span className="text-white font-medium">Internadda Enterprises</span>. All rights reserved.
           </p>
           <div className="flex items-center gap-8">
             <Link href="#" className="text-xs text-blue-100/40 hover:text-white transition-colors">
