@@ -2,11 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Zap, MapPin, BookOpen, CheckCircle2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/lib/auth-context'
-import { useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 interface InternshipCardProps {
@@ -20,7 +18,6 @@ interface InternshipCardProps {
   applicants: number
   isRecommended?: boolean
   image?: string
-  // Added fields to match the advanced card style on home page
   otherCompaniesCount?: number
   companyLogos?: string[]
 }
@@ -40,21 +37,17 @@ export function InternshipCard({
   companyLogos = []
 }: InternshipCardProps) {
   const { user } = useAuth()
-  const [isApplying, setIsApplying] = useState(false)
+  const router = useRouter()
 
-  const handleApply = async () => {
+  const handleApply = () => {
     if (!user) {
-      window.location.href = '/auth/signin'
+      // Redirect to signin with a return path to the specific application page
+      router.push(`/auth/signin?callbackUrl=/apply/${id}`)
       return
     }
 
-    setIsApplying(true)
-    try {
-      // API call logic would go here
-      console.log(`Applied to ${title} at ${company}`)
-    } finally {
-      setIsApplying(false)
-    }
+    // Direct to the new center-aligned application page
+    router.push(`/apply/${id}`)
   }
 
   return (
@@ -76,13 +69,13 @@ export function InternshipCard({
         
         {/* Applied/Trending Badge */}
         <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/20 z-10">
-          <span className="text-orange-500 text-xs">🔥</span>
+          <span className="text-orange-500 text-xs animate-pulse">🔥</span>
           <span className="text-white text-[10px] font-bold tracking-tight">{applicants} Applied</span>
         </div>
 
         {isRecommended && (
           <div className="absolute top-4 left-4 z-10">
-            <Badge className="bg-[#FFD700] text-[#0A2647] border-none font-bold">RECOMMENDED</Badge>
+            <Badge className="bg-[#FFD700] text-[#0A2647] border-none font-bold shadow-lg">RECOMMENDED</Badge>
           </div>
         )}
         
@@ -95,7 +88,7 @@ export function InternshipCard({
           HIRING AT {company} {otherCompaniesCount > 0 && `& ${otherCompaniesCount} OTHERS`}
         </p>
 
-        {/* Company Logo Stack & Count (If available) */}
+        {/* Company Logo Stack */}
         {companyLogos.length > 0 && (
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="flex -space-x-3">
@@ -106,7 +99,7 @@ export function InternshipCard({
               ))}
             </div>
             {otherCompaniesCount > 0 && (
-              <span className="text-blue-600 text-[13px] font-bold">+{otherCompaniesCount} more companies</span>
+              <span className="text-blue-600 text-[13px] font-bold">+{otherCompaniesCount} more</span>
             )}
           </div>
         )}
@@ -139,25 +132,18 @@ export function InternshipCard({
           </div>
         </div>
 
-        {/* Dynamic Apply Button */}
-        {user ? (
-          <Button 
-            onClick={handleApply}
-            disabled={isApplying}
-            className="w-full bg-[#0A2647] hover:bg-[#144272] text-white py-8 rounded-[1.25rem] font-extrabold text-lg shadow-lg shadow-blue-900/10 transition-all active:scale-95"
-          >
-            {isApplying ? 'Applying...' : 'Apply Now'}
-          </Button>
-        ) : (
-          <Link href="/auth/signin" className="w-full">
-            <Button className="w-full bg-[#0A2647] hover:bg-[#144272] text-white py-8 rounded-[1.25rem] font-extrabold text-lg shadow-lg shadow-blue-900/10 transition-all active:scale-95">
-              Sign In to Apply
-            </Button>
-          </Link>
-        )}
+        {/* Upgraded Dynamic Apply Button */}
+        <Button 
+          onClick={handleApply}
+          className="w-full bg-[#0A2647] hover:bg-[#144272] text-white py-8 rounded-[1.25rem] font-extrabold text-lg shadow-lg shadow-blue-900/10 transition-all active:scale-95"
+        >
+          {user ? 'Apply Now' : 'Sign In to Apply'}
+        </Button>
         
-        <p className="text-[10px] text-gray-400 font-semibold mt-5 uppercase tracking-widest">
-           {duration} <span className="mx-1">•</span> AI Interviews
+        <p className="text-[10px] text-gray-400 font-semibold mt-5 uppercase tracking-widest flex items-center gap-2">
+          <span>{duration}</span>
+          <span className="w-1 h-1 bg-gray-300 rounded-full" />
+          <span className="text-blue-500 font-bold">AI Interviews</span>
         </p>
       </div>
     </motion.article>
