@@ -2,15 +2,25 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // Initial response object
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   })
 
+  // Verify environment variables exist to prevent 500 error
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("Missing Supabase environment variables")
+    return response
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         get(name: string) {
@@ -38,12 +48,16 @@ export async function middleware(request: NextRequest) {
     }
   )
 
+  // Refresh session if expired - Important for Gatekeeper
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Gatekeeper: Protect the assessment route
+  // Guard: Only apply to /test routes
   if (request.nextUrl.pathname.startsWith('/test')) {
     if (!session) {
-      return NextResponse.redirect(new URL('/auth/signin', request.url))
+      // Redirect to signin if no session found
+      const redirectUrl = request.nextUrl.clone()
+      redirectUrl.pathname = '/auth/signin'
+      return NextResponse.redirect(redirectUrl)
     }
   }
 
