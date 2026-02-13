@@ -18,47 +18,31 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          request.cookies.set({ name, value, ...options })
           response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
+            request: { headers: request.headers },
           })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          request.cookies.set({ name, value: '', ...options })
           response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
+            request: { headers: request.headers },
           })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          response.cookies.set({ name, value: '', ...options })
         },
       },
     }
   )
 
+  // Get current session
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Protected Routes Logic
-  if (request.nextUrl.pathname.startsWith('/test') && !session) {
+  const isTestPage = request.nextUrl.pathname.startsWith('/test')
+  const isApplyPage = request.nextUrl.pathname.startsWith('/apply')
+
+  // Protected Routes Logic: Agar session nahi hai aur user test ya apply page par hai
+  if ((isTestPage || isApplyPage) && !session) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/auth/signin'
     redirectUrl.searchParams.set('callbackUrl', request.nextUrl.pathname)
