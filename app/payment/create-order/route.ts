@@ -3,13 +3,20 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { amount, customerId, customerName, customerEmail } = body;
+    // Added internshipId to body to ensure we redirect to the correct test page
+    const { amount, customerId, customerName, customerEmail, internshipId } = body;
 
     // Use Production URL if env is set to PRODUCTION, otherwise use Sandbox
     const isProduction = process.env.NEXT_PUBLIC_CASHFREE_ENV === 'PRODUCTION';
     const baseUrl = isProduction 
       ? 'https://api.cashfree.com/pg/orders' 
       : 'https://sandbox.cashfree.com/pg/orders';
+
+    // 1. Generate a security token identical to the one used in your client-side logic
+    // This token is valid for 5 minutes as per your middleware.ts logic
+    const timestamp = Math.floor(Date.now() / 1000);
+    const randomString = Math.random().toString(36).substring(7);
+    const secureToken = `${timestamp}_${randomString}`;
 
     const response = await fetch(baseUrl, {
       method: 'POST',
@@ -29,7 +36,9 @@ export async function POST(req: Request) {
           customer_phone: "9999999999" 
         },
         order_meta: {
-          return_url: `${req.headers.get('origin')}/apply/success?order_id={order_id}`
+          // 2. Updated return_url to point directly to the test page with the bypass token
+          // This ensures the middleware lets them through without asking for sign-in
+          return_url: `${req.headers.get('origin')}/test/${internshipId || '1'}?token=${secureToken}&order_id={order_id}`
         }
       })
     });
