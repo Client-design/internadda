@@ -100,22 +100,31 @@ export default function InternshipAssessment() {
   }, [user, authLoading, router])
 
   // --- 2. Anti-Cheating Logic ---
+
   useEffect(() => {
     if (!isAuthorized) return
-
+  
     const handleVisibility = () => {
       if (document.hidden) {
         setCheatingAttempts(prev => {
           const count = prev + 1
-          alert(`CRITICAL WARNING (${count}/3): Tab switching detected. Reaching 3 attempts will result in immediate disqualification.`)
-          if (count >= 3) setIsFinished(true)
+          
+          if (count === 1) {
+            // First Warning
+            alert(`STRICT WARNING (1/2): Tab switching detected. Your activity is being monitored. Reaching 2 attempts will result in immediate disqualification.`)
+          } else if (count >= 2) {
+            // Second Attempt - Disqualification
+            alert("CRITICAL VIOLATION: You tried tab switching again. Access revoked. Sending you back to home.")
+            router.push('/') // Redirect to home
+            setIsFinished(true)
+          }
           return count
         })
       }
     }
     document.addEventListener('visibilitychange', handleVisibility)
     return () => document.removeEventListener('visibilitychange', handleVisibility)
-  }, [isAuthorized])
+  }, [isAuthorized, router])
 
   // --- 3. Timer Logic ---
   useEffect(() => {
