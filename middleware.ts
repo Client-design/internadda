@@ -4,7 +4,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
   
-  // --- LAYER 1: DYNAMIC TOKEN BYPASS (Sabse Pehle) ---
+  // --- LAYER 1: TOKEN BYPASS (Sabse Pehle) ---
+  // Agar token hai toh direct entry do, login mat pucho
   const token = searchParams.get('token')
   if (pathname.startsWith('/test') && token) {
     try {
@@ -12,8 +13,8 @@ export async function middleware(request: NextRequest) {
       const tokenTime = parseInt(timestampStr)
       const currentTime = Math.floor(Date.now() / 1000)
 
-      // Agar token 120 seconds (2 min) se purana nahi hai, toh allow karo
-      if (currentTime - tokenTime < 120) {
+      // Token 5 minute tak valid rakhte hain (safe side)
+      if (currentTime - tokenTime < 300) {
         return NextResponse.next()
       }
     } catch (e) {
@@ -48,7 +49,7 @@ export async function middleware(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  // --- LAYER 3: PROTECTION ---
+  // --- LAYER 3: LOGIN PROTECTION ---
   if (pathname.startsWith('/test')) {
     if (!session) {
       const redirectUrl = request.nextUrl.clone()
