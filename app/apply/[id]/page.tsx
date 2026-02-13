@@ -11,9 +11,16 @@ import { useEffect, useState } from 'react'
 
 // This would typically come from an API based on the ID
 const MOCK_INTERNSHIPS = [
-  { id: '1', title: 'Python Developer', company: 'Tech Corp', stipend: '₹15,000', skills: ['Python', 'Django'], image: '/python.jpg' },
-  // ... other internships
-]
+  { id: '1', title: 'Python Developer Intern', company: 'Arjuna AI Solutions', stipend: '₹2,000 - ₹8,000', image: '/python.jpg' },
+  { id: '2', title: 'Web Development Intern', company: 'InternAdda Enterprises', stipend: '₹2,500 - ₹5,000', image: '/react.jpg' },
+  { id: '3', title: 'Data Science Intern', company: 'Larex Systems', stipend: '₹3,000 - ₹7,000', image: '/datascience.jpg' },
+  { id: '4', title: 'Data Science Intern', company: 'Quantum Analytics', stipend: '₹12,000 - ₹18,000', image: '/datascience.jpg' },
+  { id: '5', title: 'Digital Marketing Intern', company: 'Growth Mantra', stipend: '₹5,000 - ₹10,000', image: '/content.jpg' },
+  { id: '6', title: 'Full Stack Intern', company: 'Nexus Tech', stipend: '₹20,000 - ₹30,000', image: '/fullstack.jpg' },
+  { id: '7', title: 'Finance & Accounts Intern', company: 'Larex Systems', stipend: '₹5,000 - ₹8,000', image: '/finance.jpg' },
+  { id: '8', title: 'AI/ML Research Intern', company: 'Enterprise Solutions', stipend: '₹7,000 - ₹12,000', image: '/ai-ml.jpg' },
+  { id: '9', title: 'Content Strategy Intern', company: 'WriteUp Media', stipend: '₹6,000 - ₹9,000', image: '/content.jpg' },
+];
 
 export default function ApplyPage() {
   const { id } = useParams()
