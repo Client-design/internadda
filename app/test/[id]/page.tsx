@@ -1,39 +1,40 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Timer, AlertTriangle, CheckCircle2, XCircle, MessageCircle } from 'lucide-react'
+import { Timer, ShieldAlert, CheckCircle2, XCircle, MessageCircle, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { DOMAIN_TESTS } from '@/lib/test-data'
 
-// Internship-specific Question Bank (Example)
-const QUESTION_BANK: any = {
-  '1': [ /* Python Questions */ { q: "What is PEP 8?", options: ["Style Guide", "Compiler", "Library"], correct: 0 }, ...Array(24).fill({q: "Advanced Python Concept?", options: ["A", "B", "C"], correct: 1})],
-  '2': [ /* Web Dev Questions */ { q: "What is Next.js hydration?", options: ["Watering server", "Client-side React attachment", "CSS Minification"], correct: 1 }, ...Array(24).fill({q: "React Lifecycle?", options: ["A", "B", "C"], correct: 2})],
-};
-
-export default function TestPage() {
+export default function InternshipAssessment() {
   const { id } = useParams()
   const router = useRouter()
-  const [currentQuestion, setCurrentQuestion] = useState(0)
+  
+  // Load domain data or fallback to Python (ID: 1)
+  const testData = DOMAIN_TESTS[id as string] || DOMAIN_TESTS['1']
+  
+  const [currentIdx, setCurrentIdx] = useState(0)
   const [score, setScore] = useState(0)
-  const [timeLeft, setTimeLeft] = useState(1800) // 30 mins
+  const [timeLeft, setTimeLeft] = useState(1800) // 30 Minutes
   const [isFinished, setIsFinished] = useState(false)
   const [cheatingAttempts, setCheatingAttempts] = useState(0)
 
-  const questions = QUESTION_BANK[id as string] || QUESTION_BANK['1']
-
-  // Anti-Cheating: Detect Tab Switch
+  // Anti-Cheating: Detect tab/window switching
   useEffect(() => {
-    const handleVisibilityChange = () => {
+    const handleVisibility = () => {
       if (document.hidden) {
-        setCheatingAttempts(prev => prev + 1)
-        alert("WARNING: Tab switching is strictly prohibited. This attempt has been logged.")
+        setCheatingAttempts(prev => {
+          const count = prev + 1
+          alert(`CRITICAL WARNING (${count}/3): Tab switching detected. Reaching 3 attempts will result in immediate disqualification.`)
+          if (count >= 3) setIsFinished(true)
+          return count
+        })
       }
     }
-    window.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => window.removeEventListener('visibilitychange', handleVisibilityChange)
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
   }, [])
 
   // Timer Logic
@@ -43,89 +44,102 @@ export default function TestPage() {
     return () => clearInterval(timer)
   }, [timeLeft])
 
-  const handleAnswer = (index: number) => {
-    if (index === questions[currentQuestion].correct) setScore(prev => prev + 1)
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(prev => prev + 1)
+  const handleAnswer = (selected: number) => {
+    if (selected === testData.questions[currentIdx].correct) setScore(s => s + 1)
+    
+    if (currentIdx < testData.questions.length - 1) {
+      setCurrentIdx(c => c + 1)
     } else {
       setIsFinished(true)
     }
   }
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60)
-    const s = seconds % 60
-    return `${m}:${s < 10 ? '0' : ''}${s}`
-  }
-
   if (isFinished) {
-    const percentage = (score / questions.length) * 100
+    const percentage = Math.round((score / testData.questions.length) * 100)
     const passed = percentage >= 50
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-          <Card className="max-w-xl w-full p-10 text-center rounded-[3rem] shadow-2xl">
+          <div className="max-w-xl w-full bg-white p-12 rounded-[3.5rem] shadow-2xl text-center border-none">
             {passed ? (
               <>
-                <div className="flex justify-center mb-6 text-green-500"><CheckCircle2 size={80} /></div>
-                <h1 className="text-3xl font-black text-[#0A2647] mb-4">Congratulations!</h1>
-                <p className="text-gray-600 mb-8">You qualified with <strong>{percentage.toFixed(0)}%</strong>. You'll receive a mail on your registered email shortly with your scheduled AI Interview link (Collab with Arjuna AI).</p>
-                <div className="grid grid-cols-1 gap-4">
-                  <Button onClick={() => window.open(`https://wa.me/919999999999?text=Hi HR, I have qualified the test for ${id}. Please fasttrack my application.`)} className="bg-[#25D366] hover:bg-[#128C7E] text-white py-6 rounded-2xl font-bold">
-                    <MessageCircle className="mr-2" /> Fasttrack via HR 1
-                  </Button>
-                  <Button onClick={() => window.open(`https://wa.me/918888888888?text=Hi HR, I have cleared the assessment.`)} className="bg-[#25D366] hover:bg-[#128C7E] text-white py-6 rounded-2xl font-bold">
-                    <MessageCircle className="mr-2" /> Fasttrack via HR 2
-                  </Button>
+                <div className="bg-green-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle2 className="text-green-600" size={48} />
+                </div>
+                <h1 className="text-3xl font-black text-[#0A2647] mb-4">Qualification Confirmed!</h1>
+                <p className="text-gray-500 mb-8 leading-relaxed">
+                  You scored **{percentage}%**. You are now qualified. An official interview link with **Arjuna AI** has been dispatched to your email.
+                </p>
+                <div className="flex flex-col gap-3">
+                  <Button onClick={() => window.open('https://wa.me/919999999999?text=Qualified%20HR1')} className="bg-[#25D366] hover:bg-[#128C7E] py-7 rounded-2xl font-bold text-lg"><MessageCircle className="mr-2"/> Fasttrack with HR 1</Button>
+                  <Button onClick={() => window.open('https://wa.me/918888888888?text=Qualified%20HR2')} className="bg-[#25D366] hover:bg-[#128C7E] py-7 rounded-2xl font-bold text-lg"><MessageCircle className="mr-2"/> Fasttrack with HR 2</Button>
                 </div>
               </>
             ) : (
               <>
-                <div className="flex justify-center mb-6 text-red-500"><XCircle size={80} /></div>
-                <h1 className="text-3xl font-black text-[#0A2647] mb-4">Don't Give Up!</h1>
-                <p className="text-gray-600 mb-8">You scored {percentage.toFixed(0)}%. Focus on your fundamentals and try again. Success is a journey, not a destination!</p>
-                <Button onClick={() => router.push('/courses')} className="bg-[#0A2647] py-6 w-full rounded-2xl">Upgrade Skills & Retry</Button>
+                <XCircle className="text-red-500 mx-auto mb-6" size={80} />
+                <h1 className="text-3xl font-black text-[#0A2647] mb-4">Assessment Unsuccessful</h1>
+                <p className="text-gray-500 mb-8">You scored {percentage}%. We recommend reviewing the domain fundamentals and attempting again after 24 hours.</p>
+                <Button onClick={() => router.push('/internships')} className="bg-[#0A2647] w-full py-7 rounded-2xl font-bold text-white">Try Different Role</Button>
               </>
             )}
-          </Card>
+          </div>
         </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0A2647] text-white p-4">
-      <div className="max-w-4xl mx-auto py-8">
-        <div className="flex justify-between items-center mb-8 bg-white/10 p-4 rounded-2xl backdrop-blur-md">
-          <div className="flex items-center gap-2 font-mono text-xl">
-            <Timer className="text-[#FFD700]" /> {formatTime(timeLeft)}
+    <div className="min-h-screen bg-[#0A2647] p-4 md:p-12 font-sans">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-10 bg-white/10 backdrop-blur-xl p-6 rounded-[2.5rem] border border-white/20">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#FFD700] text-[#0A2647] p-2 rounded-xl">
+              <Timer size={24} />
+            </div>
+            <span className="text-white font-mono text-2xl font-bold">
+              {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}
+            </span>
           </div>
-          <div className="text-sm font-bold uppercase tracking-widest">Question {currentQuestion + 1}/{questions.length}</div>
-          <div className="flex items-center gap-1 text-red-400 text-xs uppercase font-bold">
-            <AlertTriangle size={14} /> Anti-Cheat Active
+          <div className="text-center">
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">Current Domain</p>
+            <p className="text-[#FFD700] font-black uppercase text-sm">{testData.name}</p>
+          </div>
+          <div className="flex items-center gap-2 text-red-400 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20 font-bold text-[10px] uppercase">
+            <ShieldAlert size={14} /> Anti-Cheat Active
           </div>
         </div>
 
+        <div className="mb-10 px-2">
+          <div className="flex justify-between text-white/40 text-[10px] font-bold uppercase mb-2">
+            <span>Progress: {currentIdx + 1} / {testData.questions.length}</span>
+            <span>{Math.round(((currentIdx + 1) / testData.questions.length) * 100)}% Complete</span>
+          </div>
+          <Progress value={((currentIdx + 1) / testData.questions.length) * 100} className="h-2 bg-white/10" />
+        </div>
+
         <AnimatePresence mode="wait">
-          <motion.div 
-            key={currentQuestion}
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -20, opacity: 0 }}
-            className="bg-white text-black p-8 md:p-12 rounded-[2.5rem] shadow-2xl"
+          <motion.div
+            key={currentIdx}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="bg-white p-8 md:p-16 rounded-[3.5rem] shadow-2xl relative overflow-hidden"
           >
-            <h2 className="text-2xl font-bold text-[#0A2647] mb-8 leading-tight">
-              {questions[currentQuestion].q}
+            <h2 className="text-2xl md:text-3xl font-black text-[#0A2647] mb-12 leading-tight relative z-10">
+              {testData.questions[currentIdx].q}
             </h2>
-            <div className="grid grid-cols-1 gap-4">
-              {questions[currentQuestion].options.map((option: string, i: number) => (
+
+            <div className="grid grid-cols-1 gap-4 relative z-10">
+              {testData.questions[currentIdx].options.map((option: string, i: number) => (
                 <button
                   key={i}
                   onClick={() => handleAnswer(i)}
-                  className="w-full text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-[#0A2647] hover:bg-slate-50 transition-all font-semibold text-gray-700 active:scale-[0.98]"
+                  className="w-full text-left p-6 rounded-2xl border-2 border-slate-50 hover:border-[#0A2647] hover:bg-slate-50 transition-all font-bold text-[#0A2647] active:scale-95 flex justify-between items-center group"
                 >
-                  {option}
+                  <span>{option}</span>
+                  <div className="w-6 h-6 rounded-full border-2 border-slate-200 group-hover:border-[#0A2647] transition-colors" />
                 </button>
               ))}
             </div>
