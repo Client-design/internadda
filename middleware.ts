@@ -2,22 +2,15 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl
+  
   let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   })
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseKey) {
-    return response
-  }
-
   const supabase = createServerClient(
-    supabaseUrl,
-    supabaseKey,
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -41,18 +34,30 @@ export async function middleware(request: NextRequest) {
     }
   )
 
+  // Session check ko handle karne ke liye safe method
   const { data: { session } } = await supabase.auth.getSession()
 
-  // FIX: Agar user /test path par ja raha hai
-  if (request.nextUrl.pathname.startsWith('/test')) {
-    // Agar session nahi hai, tabhi signin par bhejo
-    if (!session) {
-      const redirectUrl = request.nextUrl.clone()
-      redirectUrl.pathname = '/auth/signin'
-      // Login ke baad wapas isi test page par aane ke liye returnTo set karein
-      redirectUrl.searchParams.set('returnTo', request.nextUrl.pathname)
-      return NextResponse.redirect(redirectUrl)
+  // --- LOGIC START ---
+  
+  if (pathname.startsWith('/test')) {
+    // Agar user logged in hai, toh aage badhne do
+    if (session) {
+      return response
     }
+
+    // FIX: Agar user just payment karke aaya hai (URL params check)
+    // Agar aapke payment success URL mein koi unique identifier hai toh yahan bypass de sakte hain
+    const isReturningFromPayment = searchParams.get('status') === 'success'
+    
+    if (isReturningFromPayment) {
+        return response // Bypass login if just paid
+    }
+
+    // Default: Redirect to signin
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/auth/signin'
+    redirectUrl.searchParams.set('returnTo', pathname)
+    return NextResponse.redirect(redirectUrl)
   }
 
   return response
