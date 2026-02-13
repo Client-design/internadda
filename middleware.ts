@@ -13,29 +13,43 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
+          // Update request cookies and response cookies to keep them in sync
+          request.cookies.set({ name, value, ...options })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
           response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
+          // Update request cookies and response cookies to keep them in sync
+          request.cookies.set({ name, value: '', ...options })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
           response.cookies.set({ name, value: '', ...options })
         },
       },
     }
   )
 
-  // 🔥 Important: getSession not getUser
+  // 🔥 FIXED: Use getUser() for secure server-side verification
+  // This re-validates the auth token with Supabase to prevent "Authentication Failed" errors
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  const user = session?.user
   const { pathname } = request.nextUrl
 
-  // If logged in and trying to access auth page → redirect home
+  // 1. If logged in and trying to access auth page → redirect home
   if (user && pathname.startsWith('/auth')) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // Protected routes
+  // 2. Protected routes logic
   const isProtectedPage =
     pathname.startsWith('/test') ||
     pathname.startsWith('/apply')
@@ -47,4 +61,17 @@ export async function middleware(request: NextRequest) {
   }
 
   return response
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }
