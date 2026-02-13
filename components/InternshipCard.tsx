@@ -39,14 +39,18 @@ export function InternshipCard({
   const { user } = useAuth()
   const router = useRouter()
 
-  const handleApply = () => {
+  const handleApply = (e: React.MouseEvent) => {
+    // ESSENTIAL: Stops the click from "bubbling up" to any parent card/link components
+    e.preventDefault()
+    e.stopPropagation()
+
     if (!user) {
-      // Redirect to signin with a return path to the specific application page
+      // Redirect to signin with a return path to this specific application
       router.push(`/auth/signin?callbackUrl=/apply/${id}`)
       return
     }
 
-    // Direct to the new center-aligned application page
+    // Direct to the personalized, center-aligned application page
     router.push(`/apply/${id}`)
   }
 
@@ -79,11 +83,12 @@ export function InternshipCard({
           </div>
         )}
         
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+        {/* Gradient overlay to blend image with content */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none" />
       </div>
 
-      {/* Content Section */}
-      <div className="px-8 pb-8 pt-2 flex flex-col items-center text-center">
+      {/* Content Section - Added relative z-10 to ensure interactivity */}
+      <div className="px-8 pb-8 pt-2 flex flex-col items-center text-center relative z-10">
         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
           HIRING AT {company} {otherCompaniesCount > 0 && `& ${otherCompaniesCount} OTHERS`}
         </p>
@@ -132,10 +137,11 @@ export function InternshipCard({
           </div>
         </div>
 
-        {/* Upgraded Dynamic Apply Button */}
+        {/* CLICKABLE APPLY BUTTON */}
         <Button 
+          type="button"
           onClick={handleApply}
-          className="w-full bg-[#0A2647] hover:bg-[#144272] text-white py-8 rounded-[1.25rem] font-extrabold text-lg shadow-lg shadow-blue-900/10 transition-all active:scale-95"
+          className="relative z-20 w-full bg-[#0A2647] hover:bg-[#144272] text-white py-8 rounded-[1.25rem] font-extrabold text-lg shadow-lg shadow-blue-900/10 transition-all active:scale-95 cursor-pointer"
         >
           {user ? 'Apply Now' : 'Sign In to Apply'}
         </Button>
